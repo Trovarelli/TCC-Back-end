@@ -22,7 +22,7 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 //ROTA PÚBLICA
 app.get('/', (req, res) => {
-    res.status(200).json({ msg: "Bem vindo a nossa API!" });
+    res.status(200).json({ message: "Bem vindo a nossa API!" });
 });
 //ROTA PRIVADA
 app.get('/user/:id', middleware_1.checkToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -41,5 +41,5 @@ const dbPassword = process.env.DB_PASS;
 mongoose_1.default.set('strictQuery', false);
 mongoose_1.default.connect(`mongodb+srv://${dbUser}:${dbPassword}@cluster0.xn3pg3y.mongodb.net/TCC?retryWrites=true&w=majority`).then(() => {
     app.listen(3000);
-    console.log("Conectou ao banco");
+    console.log("Conexão realizada");
 }).catch((err) => console.log(err));

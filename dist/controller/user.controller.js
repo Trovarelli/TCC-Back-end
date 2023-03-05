@@ -13,74 +13,74 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUserById = exports.loginController = exports.createUserController = void 0;
-const user_repository_1 = require("./../repository/user.repository");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const user_repository_2 = require("../repository/user.repository");
+const repository_1 = require("../repository");
 const createUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, email, password, confirmPassword } = req.body;
-    //validações
+    const { name, email, password, confirmPassword, company } = req.body;
     if (!name)
-        return res.status(422).json({ msg: "O nome é obrigatório" });
+        return res.status(422).json({ message: "O nome é obrigatório" });
     if (!email)
-        return res.status(422).json({ msg: "O e-mail é obrigatório" });
+        return res.status(422).json({ message: "O e-mail é obrigatório" });
     if (!password)
-        return res.status(422).json({ msg: "A senha é obrigatória" });
+        return res.status(422).json({ message: "A senha é obrigatória" });
+    if (!company)
+        return res.status(422).json({ message: "A empresa é obrigatória" });
     if (password !== confirmPassword)
-        return res.status(422).json({ msg: "As senhas devem ser iguais" });
-    const userExists = yield (0, user_repository_2.findUserByEmail)(email);
+        return res.status(422).json({ message: "As senhas devem ser iguais" });
+    const userExists = yield (0, repository_1.findUserByEmail)(email);
     if (userExists)
-        return res.status(422).json({ msg: "Este e-mail ja está cadastrado" });
-    // criar a senha
+        return res.status(422).json({ message: "Este e-mail ja está cadastrado" });
     const salt = yield bcrypt_1.default.genSalt(12);
     const passwordHash = yield bcrypt_1.default.hash(password, salt);
-    // criar o usuario
     const user = {
-        name, email, password: passwordHash
+        name, email, password: passwordHash, company
     };
     try {
-        yield (0, user_repository_2.createUser)(user);
-        res.status(201).json({ msg: "Usuário criado com sucesso!" });
+        yield (0, repository_1.createUser)(user);
+        res.status(201).json({ message: "Usuário criado com sucesso!" });
     }
     catch (error) {
         console.log(error);
-        res.status(500).json({ msg: `Erro no servidor: ${error}` });
+        res.status(500).json({ message: `Erro no servidor: ${error}` });
     }
 });
 exports.createUserController = createUserController;
 const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
-    //validações
     if (!email)
-        return res.status(422).json({ msg: "O e-mail é obrigatório" });
+        return res.status(422).json({ message: "O e-mail é obrigatório" });
     if (!password)
-        return res.status(422).json({ msg: "A senha é obrigatória" });
-    const user = yield (0, user_repository_2.findUserByEmail)(email);
+        return res.status(422).json({ message: "A senha é obrigatória" });
+    const user = yield (0, repository_1.findUserByEmail)(email);
     if (!user)
-        return res.status(404).json({ msg: "Usuário não cadastrado" });
-    // checar a senha
+        return res.status(404).json({ message: "Usuário não cadastrado" });
     const checkPassword = yield bcrypt_1.default.compare(password, user.password);
     if (!checkPassword)
-        return res.status(422).json({ msg: "Senha inválida" });
+        return res.status(422).json({ message: "Senha inválida" });
     try {
         const secret = process.env.SECRET;
         const token = jsonwebtoken_1.default.sign({
             id: user._id
-        }, secret);
-        res.status(200).json({ msg: "Autenticação realizada com sucesso", token });
+        }, secret, { expiresIn: process.env.JWT_EXPIRES_IN });
+        res.status(200).json({ message: "Autenticação realizada com sucesso", token });
     }
     catch (err) {
         console.log(err);
-        res.status(500).json({ msg: `Erro no servidor: ${err}` });
+        res.status(500).json({ message: `Erro no servidor: ${err}` });
     }
 });
 exports.loginController = loginController;
 const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = req.params.id;
-    // verificar se o usuario existe
-    const user = yield (0, user_repository_1.findUserById)(id, '-password');
-    if (!user)
-        return res.status(404).json({ msg: "Usuário não encontrado" });
-    res.status(200).json({ user });
+    try {
+        const user = yield (0, repository_1.findUserById)(id, '-password -_id');
+        if (!user)
+            return res.status(404).json({ message: "Usuário não encontrado" });
+        res.status(200).json({ user });
+    }
+    catch (err) {
+        res.status(400).json({ message: "Id inválido" });
+    }
 });
 exports.getUserById = getUserById;

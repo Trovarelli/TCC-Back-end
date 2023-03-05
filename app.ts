@@ -11,12 +11,12 @@ app.use(express.json())
 
 //ROTA PÚBLICA
 app.get('/', (req, res) => {
-    res.status(200).json({ msg: "Bem vindo a nossa API!" })
+    res.status(200).json({ message: "Bem vindo a nossa API!" })
 })
 
 //ROTA PRIVADA
 app.get('/user/:id', checkToken, async (req, res) => {
-   return getUserById(req, res)
+    return getUserById(req, res)
 })
 
 //ROTA DE REGISTRO
