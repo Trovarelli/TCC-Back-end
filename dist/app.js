@@ -14,12 +14,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 require('dotenv').config();
 const express_1 = __importDefault(require("express"));
+const cors = require('cors');
 const mongoose_1 = __importDefault(require("mongoose"));
 const controller_1 = require("./controller");
 const middleware_1 = require("./middleware");
 const app = (0, express_1.default)();
 // CONFIG JSON
 app.use(express_1.default.json());
+app.use(cors({
+    origin: 'http://localhost:5173'
+}));
 //ROTA PÚBLICA
 app.get('/', (req, res) => {
     res.status(200).json({ message: "Bem vindo a nossa API!" });

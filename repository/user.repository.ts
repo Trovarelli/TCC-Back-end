@@ -1,9 +1,9 @@
 import { User, UserModel } from "../models";
 
 export const createUser = async (user: UserModel) => {
-    const { name, email, password, company } = user
+    const { name, email, password, company, gender } = user
     const userModel = new User({
-        name, email, password, company
+        name, email, password, company, gender
     })
     return User.create(userModel)
 }

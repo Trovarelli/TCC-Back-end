@@ -1,5 +1,6 @@
 require('dotenv').config()
 import express from 'express'
+const cors = require('cors')
 import mongoose from 'mongoose'
 import { createUserController, getUserById, loginController } from './controller'
 import { checkToken } from './middleware'
@@ -8,6 +9,10 @@ const app = express()
 
 // CONFIG JSON
 app.use(express.json())
+
+app.use(cors({
+    origin: 'http://localhost:5173'
+}))
 
 //ROTA PÚBLICA
 app.get('/', (req, res) => {

@@ -16,25 +16,31 @@ exports.getUserById = exports.loginController = exports.createUserController = v
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const repository_1 = require("../repository");
+const formatResponse_1 = require("../utils/formatResponse");
 const createUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, email, password, confirmPassword, company } = req.body;
+    const { name, email, password, confirmPassword, company, gender } = req.body;
+    const defaultGenders = ['M', 'F', 'O'];
     if (!name)
-        return res.status(422).json({ message: "O nome é obrigatório" });
+        return res.status(400).json({ message: "O nome é obrigatório" });
     if (!email)
-        return res.status(422).json({ message: "O e-mail é obrigatório" });
+        return res.status(400).json({ message: "O e-mail é obrigatório" });
     if (!password)
-        return res.status(422).json({ message: "A senha é obrigatória" });
+        return res.status(400).json({ message: "A senha é obrigatória" });
     if (!company)
-        return res.status(422).json({ message: "A empresa é obrigatória" });
+        return res.status(400).json({ message: "A empresa é obrigatória" });
+    if (!gender)
+        return res.status(400).json({ message: "O gênero é obrigatório" });
+    if (!defaultGenders.includes(gender))
+        return res.status(400).json({ message: "Tipo de gênero inválido" });
     if (password !== confirmPassword)
-        return res.status(422).json({ message: "As senhas devem ser iguais" });
+        return res.status(400).json({ message: "As senhas devem ser iguais" });
     const userExists = yield (0, repository_1.findUserByEmail)(email);
     if (userExists)
-        return res.status(422).json({ message: "Este e-mail ja está cadastrado" });
+        return res.status(400).json({ message: "Este e-mail ja está cadastrado" });
     const salt = yield bcrypt_1.default.genSalt(12);
     const passwordHash = yield bcrypt_1.default.hash(password, salt);
     const user = {
-        name, email, password: passwordHash, company
+        name, email, password: passwordHash, company, gender
     };
     try {
         yield (0, repository_1.createUser)(user);
@@ -49,21 +55,21 @@ exports.createUserController = createUserController;
 const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     if (!email)
-        return res.status(422).json({ message: "O e-mail é obrigatório" });
+        return res.status(400).json({ message: "O e-mail é obrigatório" });
     if (!password)
-        return res.status(422).json({ message: "A senha é obrigatória" });
+        return res.status(400).json({ message: "A senha é obrigatória" });
     const user = yield (0, repository_1.findUserByEmail)(email);
     if (!user)
         return res.status(404).json({ message: "Usuário não cadastrado" });
     const checkPassword = yield bcrypt_1.default.compare(password, user.password);
     if (!checkPassword)
-        return res.status(422).json({ message: "Senha inválida" });
+        return res.status(400).json({ message: "Senha inválida" });
     try {
         const secret = process.env.SECRET;
         const token = jsonwebtoken_1.default.sign({
             id: user._id
         }, secret, { expiresIn: process.env.JWT_EXPIRES_IN });
-        res.status(200).json({ message: "Autenticação realizada com sucesso", token });
+        res.status(200).json({ message: `Olá ${user.name.split(' ')[0]}, seja bem vind${(0, formatResponse_1.checkGender)(user.gender)}`, token });
     }
     catch (err) {
         console.log(err);
