@@ -12,12 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-require('dotenv').config();
 const express_1 = __importDefault(require("express"));
-const cors = require('cors');
 const mongoose_1 = __importDefault(require("mongoose"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const controller_1 = require("./controller");
 const middleware_1 = require("./middleware");
+require('dotenv').config();
+const cors = require('cors');
 const app = (0, express_1.default)();
 // CONFIG JSON
 app.use(express_1.default.json());
@@ -27,6 +28,21 @@ app.use(cors({
 //ROTA PÚBLICA
 app.get('/', (req, res) => {
     res.status(200).json({ message: "Bem vindo a nossa API!" });
+});
+app.post('/auth', (req, res) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(" ")[1];
+    if (!token)
+        return res.status(401).json({ message: 'Token vazio' });
+    try {
+        const secret = process.env.SECRET;
+        jsonwebtoken_1.default.verify(token, secret);
+        return res.status(200).json({ message: 'Ok' });
+    }
+    catch (error) {
+        console.log(error);
+        return res.status(400).json({ message: "Token inválido" });
+    }
 });
 //ROTA PRIVADA
 app.get('/user/:id', middleware_1.checkToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {

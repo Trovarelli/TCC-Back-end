@@ -63,7 +63,7 @@ export const loginController = async (req: Request, res: Response) => {
     try {
         const secret = process.env.SECRET
         const token = jwt.sign({
-            id: user._id
+            key: user._id
         }, secret as string, { expiresIn: process.env.JWT_EXPIRES_IN })
 
         res.status(200).json({ message: `Olá ${user.name.split(' ')[0]}, seja bem vind${checkGender(user.gender)}`, token })

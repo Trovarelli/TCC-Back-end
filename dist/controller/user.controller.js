@@ -67,7 +67,7 @@ const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function
     try {
         const secret = process.env.SECRET;
         const token = jsonwebtoken_1.default.sign({
-            id: user._id
+            key: user._id
         }, secret, { expiresIn: process.env.JWT_EXPIRES_IN });
         res.status(200).json({ message: `Olá ${user.name.split(' ')[0]}, seja bem vind${(0, formatResponse_1.checkGender)(user.gender)}`, token });
     }

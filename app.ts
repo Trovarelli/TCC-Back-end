@@ -1,9 +1,10 @@
-require('dotenv').config()
 import express from 'express'
-const cors = require('cors')
 import mongoose from 'mongoose'
+import jwt from 'jsonwebtoken'
 import { createUserController, getUserById, loginController } from './controller'
 import { checkToken } from './middleware'
+require('dotenv').config()
+const cors = require('cors')
 
 const app = express()
 
@@ -17,6 +18,21 @@ app.use(cors({
 //ROTA PÚBLICA
 app.get('/', (req, res) => {
     res.status(200).json({ message: "Bem vindo a nossa API!" })
+})
+
+app.post('/auth', (req, res) => {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(" ")[1]
+    if (!token) return res.status(401).json({ message: 'Token vazio' })
+    try {
+        const secret = process.env.SECRET
+        jwt.verify(token, secret as string)
+        return res.status(200).json({ message: 'Ok' })
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json({ message: "Token inválido" })
+    }
+
 })
 
 //ROTA PRIVADA
