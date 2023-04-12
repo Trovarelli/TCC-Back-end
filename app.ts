@@ -12,7 +12,7 @@ const app = express()
 app.use(express.json())
 
 app.use(cors({
-    origin: 'http://localhost:5173'
+    origin: 'http://localhost:3000'
 }))
 
 //ROTA PÚBLICA
@@ -56,7 +56,7 @@ const dbPassword = process.env.DB_PASS
 mongoose.set('strictQuery', false)
 
 mongoose.connect(`mongodb+srv://${dbUser}:${dbPassword}@cluster0.xn3pg3y.mongodb.net/TCC?retryWrites=true&w=majority`).then(() => {
-    app.listen(3000)
+    app.listen(3001)
     console.log("Conexão realizada")
 }).catch((err) => console.log(err))
 

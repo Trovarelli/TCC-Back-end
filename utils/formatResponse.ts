@@ -5,6 +5,6 @@ export const checkGender = (gender: 'M' | 'F' | 'O') => {
         case 'O':
             return 'e'
         default:
-            return 'o'
+            return 'o(a)'
     }
 }

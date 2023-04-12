@@ -8,7 +8,7 @@ const checkGender = (gender) => {
         case 'O':
             return 'e';
         default:
-            return 'o';
+            return 'o(a)';
     }
 };
 exports.checkGender = checkGender;

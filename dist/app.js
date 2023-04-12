@@ -23,7 +23,7 @@ const app = (0, express_1.default)();
 // CONFIG JSON
 app.use(express_1.default.json());
 app.use(cors({
-    origin: 'http://localhost:5173'
+    origin: 'http://localhost:3000'
 }));
 //ROTA PÚBLICA
 app.get('/', (req, res) => {
@@ -60,6 +60,6 @@ const dbUser = process.env.DB_USER;
 const dbPassword = process.env.DB_PASS;
 mongoose_1.default.set('strictQuery', false);
 mongoose_1.default.connect(`mongodb+srv://${dbUser}:${dbPassword}@cluster0.xn3pg3y.mongodb.net/TCC?retryWrites=true&w=majority`).then(() => {
-    app.listen(3000);
+    app.listen(3001);
     console.log("Conexão realizada");
 }).catch((err) => console.log(err));
