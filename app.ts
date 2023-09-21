@@ -1,19 +1,28 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import jwt from 'jsonwebtoken'
-import { createUserController, getUserById, loginController } from './controller'
+import { createUserController, getUserById, loginController, createCandidateController, getCadidateController } from './controller'
 import { checkToken } from './middleware'
+
 require('dotenv').config()
 const cors = require('cors')
 
 const app = express()
 
 // CONFIG JSON
-app.use(express.json())
+app.use(express.json({limit: '50mb'}))
 
 app.use(cors({
     origin: 'http://localhost:3000'
 }))
+
+app.post('/candidate', function (req, res) {
+    return createCandidateController(req, res)
+});
+
+app.get('/candidate', function (req, res) {
+    return getCadidateController(res)
+});
 
 //ROTA PÚBLICA
 app.get('/', (req, res) => {
@@ -60,3 +69,4 @@ mongoose.connect(`mongodb+srv://${dbUser}:${dbPassword}@cluster0.xn3pg3y.mongodb
     console.log("Conexão realizada")
 }).catch((err) => console.log(err))
 
+"mongodb+srv://trovarelli:1z4E8sACwgawP4Ru@cluster0.xn3pg3y.mongodb.net/TCC?retryWrites=true&w=majority"

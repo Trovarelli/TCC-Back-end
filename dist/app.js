@@ -21,10 +21,16 @@ require('dotenv').config();
 const cors = require('cors');
 const app = (0, express_1.default)();
 // CONFIG JSON
-app.use(express_1.default.json());
+app.use(express_1.default.json({ limit: '50mb' }));
 app.use(cors({
     origin: 'http://localhost:3000'
 }));
+app.post('/candidate', function (req, res) {
+    return (0, controller_1.createCandidateController)(req, res);
+});
+app.get('/candidate', function (req, res) {
+    return (0, controller_1.getCadidateController)(res);
+});
 //ROTA PÚBLICA
 app.get('/', (req, res) => {
     res.status(200).json({ message: "Bem vindo a nossa API!" });
@@ -63,3 +69,4 @@ mongoose_1.default.connect(`mongodb+srv://${dbUser}:${dbPassword}@cluster0.xn3pg
     app.listen(3001);
     console.log("Conexão realizada");
 }).catch((err) => console.log(err));
+"mongodb+srv://trovarelli:1z4E8sACwgawP4Ru@cluster0.xn3pg3y.mongodb.net/TCC?retryWrites=true&w=majority";
