@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 interface CandidateModel {
     name?: string
+    sourceId: string
     age: string
     generalData?: string
     favorite?: boolean
@@ -11,6 +12,7 @@ interface CandidateModel {
 const CandidateSchema = new mongoose.Schema({
     name: { type: String, required: true },
     age: { type: Number, required: false, readonly: true },
+    sourceId: { type: String, required: true},
     generalData: { type: String, required: false, readonly: true },
     favorite: { type: Boolean, required: false, default: false },
     curriculum: { type: String, required: true, readonly: true }

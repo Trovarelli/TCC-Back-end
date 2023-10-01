@@ -8,6 +8,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const CandidateSchema = new mongoose_1.default.Schema({
     name: { type: String, required: true },
     age: { type: Number, required: false, readonly: true },
+    sourceId: { type: String, required: true },
     generalData: { type: String, required: false, readonly: true },
     favorite: { type: Boolean, required: false, default: false },
     curriculum: { type: String, required: true, readonly: true }

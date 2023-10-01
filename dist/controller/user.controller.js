@@ -16,7 +16,6 @@ exports.getUserById = exports.loginController = exports.createUserController = v
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const repository_1 = require("../repository");
-const formatResponse_1 = require("../utils/formatResponse");
 const createUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, email, password, confirmPassword, company, gender } = req.body;
     const defaultGenders = ['M', 'F', 'O'];
@@ -69,7 +68,7 @@ const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function
         const token = jsonwebtoken_1.default.sign({
             key: user._id
         }, secret, { expiresIn: process.env.JWT_EXPIRES_IN });
-        res.status(200).json({ message: `Olá ${user.name.split(' ')[0]}, seja bem vind${(0, formatResponse_1.checkGender)(user.gender)}`, token });
+        res.status(200).json({ message: `Olá ${user.name.split(' ')[0]}, seja bem vindo(a)`, token });
     }
     catch (err) {
         console.log(err);

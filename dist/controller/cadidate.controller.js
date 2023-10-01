@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createCandidateController = exports.getCadidateController = void 0;
 const repository_1 = require("../repository");
+const utils_1 = require("../utils");
 const getCadidateController = (res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield (0, repository_1.findCandidates)();
@@ -24,15 +25,24 @@ const getCadidateController = (res) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.getCadidateController = getCadidateController;
 const createCandidateController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { curriculum } = req.body;
-    const candidate = {
-        age: '22',
-        curriculum,
-        favorite: false,
-        generalData: 'ASDJUIOIFBQEUJIPGFRBHQIP  	OURGBQEIPU´JGFHJÁOIFJÓIjf [p    jo´~aNS´FJKOsdnfo´jkSNDFO´JNSdfoj´h n',
-        name: 'CIDO'
-    };
     try {
+        const { curriculum } = req.body;
+        if (!curriculum) {
+            res.status(400).json({ message: "por favor faça o upload do curriculo" });
+            return;
+        }
+        console.log(typeof curriculum);
+        const sourceId = yield (0, utils_1.savePdfForExtract)(curriculum);
+        console.log('ID', sourceId);
+        const generalData = yield (0, utils_1.askGeralQuestions)(sourceId);
+        const candidate = {
+            age: '20',
+            curriculum,
+            sourceId,
+            favorite: false,
+            generalData,
+            name: 'teste'
+        };
         yield (0, repository_1.createCandidate)(candidate);
         res.status(201).json({ message: "candidato criado com sucesso!" });
     }

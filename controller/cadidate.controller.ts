@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 
 import { createCandidate, findCandidates } from '../repository'
 import { CandidateModel } from "../models";
+import { askGeralQuestions, savePdfForExtract } from "../utils";
+
 
 export const getCadidateController = async (res: Response) => {
     try {
@@ -16,17 +18,31 @@ export const getCadidateController = async (res: Response) => {
 }
 
 export const createCandidateController = async (req: Request, res: Response) => {
-    const { curriculum } = req.body
-
-    const candidate: CandidateModel = {
-        age: '22',
-        curriculum,
-        favorite: false,
-        generalData: 'ASDJUIOIFBQEUJIPGFRBHQIP  	OURGBQEIPU´JGFHJÁOIFJÓIjf [p    jo´~aNS´FJKOsdnfo´jkSNDFO´JNSdfoj´h n',
-        name: 'CIDO'
-    }
-    
     try {
+        const { curriculum } = req.body
+        if(!curriculum) 
+        {
+            res.status(400).json({ message: "por favor faça o upload do curriculo" })
+            return
+        }
+
+        console.log(typeof curriculum)
+
+        const sourceId = await savePdfForExtract(curriculum)
+
+        console.log('ID', sourceId)
+
+        const generalData = await askGeralQuestions(sourceId)
+       
+        const candidate: CandidateModel = {
+            age: '20',
+            curriculum,
+            sourceId,
+            favorite: false,
+            generalData,
+            name: 'teste'
+        }
+
         await createCandidate(candidate)
         res.status(201).json({ message: "candidato criado com sucesso!" })
     } catch (error) {

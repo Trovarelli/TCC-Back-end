@@ -12,9 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.findCandidates = exports.createCandidate = void 0;
 const models_1 = require("../models");
 const createCandidate = (candidato) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, age, generalData, favorite, curriculum } = candidato;
+    const { name, age, generalData, favorite, curriculum, sourceId } = candidato;
     const CandidateModel = new models_1.Candidate({
-        name, age, generalData, favorite, curriculum
+        name, age, generalData, favorite, curriculum, sourceId
     });
     return models_1.Candidate.create(CandidateModel);
 });

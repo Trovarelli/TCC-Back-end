@@ -3,7 +3,6 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
 import { findUserById, findUserByEmail, createUser } from '../repository'
-import { checkGender } from "../utils/formatResponse";
 
 export const createUserController = async (req: Request, res: Response) => {
     const { name, email, password, confirmPassword, company, gender } = req.body
@@ -66,7 +65,7 @@ export const loginController = async (req: Request, res: Response) => {
             key: user._id
         }, secret as string, { expiresIn: process.env.JWT_EXPIRES_IN })
 
-        res.status(200).json({ message: `Olá ${user.name.split(' ')[0]}, seja bem vind${checkGender(user.gender)}`, token })
+        res.status(200).json({ message: `Olá ${user.name.split(' ')[0]}, seja bem vindo(a)`, token })
     } catch (err) {
         console.log(err)
         res.status(500).json({ message: `Erro no servidor: ${err}` })
