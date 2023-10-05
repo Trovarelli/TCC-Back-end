@@ -27,15 +27,15 @@ export async function savePdfForExtract(file: string) {
       "x-api-key": process.env.CHATPDF_API_KEY,
     },
   };
-  
-  console.log(filePath)
-  
+    
   return axios
   .post("https://api.chatpdf.com/v1/sources/add-file", formData, options)
   .then((response: { data: { sourceId: any; }; }) => {
+    console.log(response.data)
     return response.data.sourceId
   })
   .catch((error: { message: any; response: { data: any; }; }) => {
+    console.log(error.message)
     throw new Error(error.message)
   })
 

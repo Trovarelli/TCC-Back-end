@@ -30,7 +30,7 @@ export const createCandidateController = async (req: Request, res: Response) => 
 
         const sourceId = await savePdfForExtract(curriculum)
 
-        console.log('ID', sourceId)
+        console.log(sourceId)
 
         const generalData = await askGeralQuestions(sourceId)
        

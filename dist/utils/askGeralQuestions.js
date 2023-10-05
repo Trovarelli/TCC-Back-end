@@ -20,14 +20,13 @@ function askGeralQuestions(sourceId) {
             },
         };
         const data = {
-            stream: true,
             sourceId,
-            messages: [
+            "messages": [
                 {
-                    role: "user",
-                    content: "qual o nome do candidato ?",
-                },
-            ],
+                    "role": "user",
+                    "content": "How much is the world?"
+                }
+            ]
         };
         const retorno = axios
             .post("https://api.chatpdf.com/v1/chats/message", data, config)
@@ -36,6 +35,7 @@ function askGeralQuestions(sourceId) {
             return response.data.content;
         })
             .catch((error) => {
+            console.log(error.response.data);
             throw new Error(error.message);
         });
         return retorno;

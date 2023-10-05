@@ -69,4 +69,3 @@ mongoose_1.default.connect(`mongodb+srv://${dbUser}:${dbPassword}@cluster0.xn3pg
     app.listen(3001);
     console.log("Conexão realizada");
 }).catch((err) => console.log(err));
-"mongodb+srv://trovarelli:1z4E8sACwgawP4Ru@cluster0.xn3pg3y.mongodb.net/TCC?retryWrites=true&w=majority";

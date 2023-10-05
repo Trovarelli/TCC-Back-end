@@ -33,7 +33,7 @@ const createCandidateController = (req, res) => __awaiter(void 0, void 0, void 0
         }
         console.log(typeof curriculum);
         const sourceId = yield (0, utils_1.savePdfForExtract)(curriculum);
-        console.log('ID', sourceId);
+        console.log(sourceId);
         const generalData = yield (0, utils_1.askGeralQuestions)(sourceId);
         const candidate = {
             age: '20',
