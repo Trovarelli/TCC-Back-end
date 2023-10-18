@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 import { findUserById, findUserByEmail, createUser } from '../repository'
 
 export const createUserController = async (req: Request, res: Response) => {
-    const { name, email, password, confirmPassword, company } = req.body
+    const { name, email, password, confirmPassword, company, photo } = req.body
 
     if (!name) return res.status(400).json({ message: "O nome é obrigatório" })
 
@@ -25,7 +25,7 @@ export const createUserController = async (req: Request, res: Response) => {
     const passwordHash = await bcrypt.hash(password, salt)
 
     const user = {
-        name, email, password: passwordHash, company
+        name, email, password: passwordHash, company, photo: photo ?? ''
     }
 
     try {
@@ -51,7 +51,7 @@ export const loginController = async (req: Request, res: Response) => {
 
     const checkPassword = await bcrypt.compare(password, user.password)
 
-    if (!checkPassword) return res.status(400).json({ message: "Senha inválida" })
+    if (!checkPassword) return res.status(400).json({ message: "Usuário ou senha inválidos" })
 
     try {
         const secret = process.env.SECRET
@@ -59,7 +59,9 @@ export const loginController = async (req: Request, res: Response) => {
             key: user._id
         }, secret as string, { expiresIn: process.env.JWT_EXPIRES_IN })
 
-        res.status(200).json({ message: `Olá ${user.name.split(' ')[0]}, seja bem vindo(a)`, token })
+        const {name, company, photo} = user
+
+        res.status(200).json({ message: `Olá ${user.name.split(' ')[0]}, seja bem vindo(a)`, token, nome: name, empresa: company, foto: photo })
     } catch (err) {
         console.log(err)
         res.status(500).json({ message: `Erro no servidor: ${err}` })

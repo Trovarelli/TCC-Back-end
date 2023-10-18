@@ -17,7 +17,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const repository_1 = require("../repository");
 const createUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, email, password, confirmPassword, company } = req.body;
+    const { name, email, password, confirmPassword, company, photo } = req.body;
     if (!name)
         return res.status(400).json({ message: "O nome é obrigatório" });
     if (!email)
@@ -34,7 +34,7 @@ const createUserController = (req, res) => __awaiter(void 0, void 0, void 0, fun
     const salt = yield bcrypt_1.default.genSalt(12);
     const passwordHash = yield bcrypt_1.default.hash(password, salt);
     const user = {
-        name, email, password: passwordHash, company
+        name, email, password: passwordHash, company, photo: photo !== null && photo !== void 0 ? photo : ''
     };
     try {
         yield (0, repository_1.createUser)(user);
@@ -57,13 +57,14 @@ const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function
         return res.status(404).json({ message: "Usuário não cadastrado" });
     const checkPassword = yield bcrypt_1.default.compare(password, user.password);
     if (!checkPassword)
-        return res.status(400).json({ message: "Senha inválida" });
+        return res.status(400).json({ message: "Usuário ou senha inválidos" });
     try {
         const secret = process.env.SECRET;
         const token = jsonwebtoken_1.default.sign({
             key: user._id
         }, secret, { expiresIn: process.env.JWT_EXPIRES_IN });
-        res.status(200).json({ message: `Olá ${user.name.split(' ')[0]}, seja bem vindo(a)`, token });
+        const { name, company, photo } = user;
+        res.status(200).json({ message: `Olá ${user.name.split(' ')[0]}, seja bem vindo(a)`, token, nome: name, empresa: company, foto: photo });
     }
     catch (err) {
         console.log(err);
