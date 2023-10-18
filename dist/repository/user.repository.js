@@ -12,9 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.findUserByEmail = exports.findUserById = exports.createUser = void 0;
 const models_1 = require("../models");
 const createUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, email, password, company, gender } = user;
+    const { name, email, password, company, } = user;
     const userModel = new models_1.User({
-        name, email, password, company, gender
+        name, email, password, company,
     });
     return models_1.User.create(userModel);
 });

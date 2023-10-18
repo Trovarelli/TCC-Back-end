@@ -5,7 +5,6 @@ interface UserModel {
   email: string;
   password: string;
   company: string;
-  gender: 'M' | 'F' | 'O'
 }
 
 const UserSchema = new Schema({
@@ -13,7 +12,6 @@ const UserSchema = new Schema({
   email: { type: String, required: true },
   password: { type: String, required: true },
   company: { type: String, required: true },
-  gender: { type: String, required: true }
 });
 
 const User = model<UserModel>('user', UserSchema)

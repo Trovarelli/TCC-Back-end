@@ -5,9 +5,7 @@ import jwt from 'jsonwebtoken'
 import { findUserById, findUserByEmail, createUser } from '../repository'
 
 export const createUserController = async (req: Request, res: Response) => {
-    const { name, email, password, confirmPassword, company, gender } = req.body
-
-    const defaultGenders = ['M', 'F', 'O']
+    const { name, email, password, confirmPassword, company } = req.body
 
     if (!name) return res.status(400).json({ message: "O nome é obrigatório" })
 
@@ -16,10 +14,6 @@ export const createUserController = async (req: Request, res: Response) => {
     if (!password) return res.status(400).json({ message: "A senha é obrigatória" })
 
     if (!company) return res.status(400).json({ message: "A empresa é obrigatória" })
-
-    if (!gender) return res.status(400).json({ message: "O gênero é obrigatório" })
-
-    if (!defaultGenders.includes(gender)) return res.status(400).json({ message: "Tipo de gênero inválido" })
 
     if (password !== confirmPassword) return res.status(400).json({ message: "As senhas devem ser iguais" })
 
@@ -31,7 +25,7 @@ export const createUserController = async (req: Request, res: Response) => {
     const passwordHash = await bcrypt.hash(password, salt)
 
     const user = {
-        name, email, password: passwordHash, company, gender
+        name, email, password: passwordHash, company
     }
 
     try {
