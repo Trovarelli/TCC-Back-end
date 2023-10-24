@@ -12,10 +12,40 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserById = exports.loginController = exports.createUserController = void 0;
+exports.getUserById = exports.loginController = exports.createUserController = exports.updateUserController = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const repository_1 = require("../repository");
+const utils_1 = require("../utils");
+const updateUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { name, email, password, company, photo } = req.body;
+    if (!name)
+        return res.status(400).json({ message: "O nome é obrigatório" });
+    if (!email)
+        return res.status(400).json({ message: "O e-mail é obrigatório" });
+    if (!company)
+        return res.status(400).json({ message: "A empresa é obrigatória" });
+    const user = yield (0, repository_1.findUserByEmail)(email);
+    const userIdByToken = (0, utils_1.getUserIdByToken)(req);
+    if ((user === null || user === void 0 ? void 0 : user._id.toString()) !== userIdByToken)
+        return res.status(401).json({ message: "Só é possivel atualizar informações do mesmo usuário logado" });
+    const checkPassword = yield bcrypt_1.default.compare(password, ((user === null || user === void 0 ? void 0 : user.password) || ''));
+    const salt = yield bcrypt_1.default.genSalt(12);
+    let passwordHash = user === null || user === void 0 ? void 0 : user.password;
+    if (!checkPassword && password !== '') {
+        passwordHash = yield bcrypt_1.default.hash(password, salt);
+    }
+    const newUser = { name, email, password: passwordHash || '', company, photo };
+    try {
+        yield (0, repository_1.updateUser)(newUser, (userIdByToken || ''));
+        res.status(201).json(Object.assign({}, newUser));
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ message: `Erro no servidor: ${error}` });
+    }
+});
+exports.updateUserController = updateUserController;
 const createUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, email, password, confirmPassword, company, photo } = req.body;
     if (!name)
@@ -64,7 +94,7 @@ const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function
             key: user._id
         }, secret, { expiresIn: process.env.JWT_EXPIRES_IN });
         const { name, company, photo } = user;
-        res.status(200).json({ message: `Olá ${user.name.split(' ')[0]}, seja bem vindo(a)`, token, nome: name, empresa: company, foto: photo });
+        res.status(200).json({ message: `Olá ${user.name}, seja bem vindo(a)`, token, nome: name, empresa: company, foto: photo });
     }
     catch (err) {
         console.log(err);

@@ -1,1 +1,1 @@
-export * from './requestValidation'
+export * from './checkToken'

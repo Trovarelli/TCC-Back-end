@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findUserByEmail = exports.findUserById = exports.createUser = void 0;
+exports.findUserByEmail = exports.findUserById = exports.updateUser = exports.createUser = void 0;
 const models_1 = require("../models");
 const createUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, email, password, company, } = user;
@@ -19,6 +19,20 @@ const createUser = (user) => __awaiter(void 0, void 0, void 0, function* () {
     return models_1.User.create(userModel);
 });
 exports.createUser = createUser;
+const updateUser = (user, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const { name, email, password, company, photo } = user;
+    yield models_1.User.updateOne({ _id: id }, {
+        $set: {
+            name,
+            email,
+            company,
+            password,
+            photo
+        }
+    });
+    return models_1.User.findById(id, '-_id');
+});
+exports.updateUser = updateUser;
 const findUserById = (id, exclude) => __awaiter(void 0, void 0, void 0, function* () {
     return models_1.User.findById(id, exclude);
 });

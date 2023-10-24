@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const controller_1 = require("./controller");
 const middleware_1 = require("./middleware");
 require('dotenv').config();
@@ -35,24 +34,9 @@ app.get('/candidate', function (req, res) {
 app.get('/', (req, res) => {
     res.status(200).json({ message: "Bem vindo a nossa API!" });
 });
-app.post('/auth', (req, res) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(" ")[1];
-    if (!token)
-        return res.status(401).json({ message: 'Token vazio' });
-    try {
-        const secret = process.env.SECRET;
-        jsonwebtoken_1.default.verify(token, secret);
-        return res.status(200).json({ message: 'Ok' });
-    }
-    catch (error) {
-        console.log(error);
-        return res.status(400).json({ message: "Token inválido" });
-    }
-});
 //ROTA PRIVADA
-app.get('/user/:id', middleware_1.checkToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    return (0, controller_1.getUserById)(req, res);
+app.post('/user/:id', middleware_1.checkToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    return (0, controller_1.updateUserController)(req, res);
 }));
 //ROTA DE REGISTRO
 app.post('/auth/register', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -64,8 +48,9 @@ app.post('/auth/login', (req, res) => __awaiter(void 0, void 0, void 0, function
 }));
 const dbUser = process.env.DB_USER;
 const dbPassword = process.env.DB_PASS;
+const dbName = process.env.DB_NAME;
 mongoose_1.default.set('strictQuery', false);
-mongoose_1.default.connect(`mongodb+srv://${dbUser}:${dbPassword}@cluster0.xn3pg3y.mongodb.net/TCC?retryWrites=true&w=majority`).then(() => {
+mongoose_1.default.connect(`mongodb+srv://${dbUser}:${dbPassword}@cluster0.xn3pg3y.mongodb.net/${dbName}?retryWrites=true&w=majority`).then(() => {
     app.listen(3001);
     console.log("Conexão realizada");
 }).catch((err) => console.log(err));
