@@ -13,7 +13,7 @@ export const getCadidateController = async (res: Response) => {
         res.status(200).json({ user })
     }
     catch (err) {
-        res.status(400).json({ message: "inválido" })
+        res.status(401).json({ message: "inválido" })
     }
 }
 

@@ -20,7 +20,7 @@ const getCadidateController = (res) => __awaiter(void 0, void 0, void 0, functio
         res.status(200).json({ user });
     }
     catch (err) {
-        res.status(400).json({ message: "inválido" });
+        res.status(401).json({ message: "inválido" });
     }
 });
 exports.getCadidateController = getCadidateController;

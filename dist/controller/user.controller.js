@@ -19,6 +19,7 @@ const repository_1 = require("../repository");
 const utils_1 = require("../utils");
 const updateUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, email, password, company, photo } = req.body;
+    const userIdFromParams = req.params.id;
     if (!name)
         return res.status(400).json({ message: "O nome é obrigatório" });
     if (!email)
@@ -27,7 +28,7 @@ const updateUserController = (req, res) => __awaiter(void 0, void 0, void 0, fun
         return res.status(400).json({ message: "A empresa é obrigatória" });
     const user = yield (0, repository_1.findUserByEmail)(email);
     const userIdByToken = (0, utils_1.getUserIdByToken)(req);
-    if ((user === null || user === void 0 ? void 0 : user._id.toString()) !== userIdByToken)
+    if ((user === null || user === void 0 ? void 0 : user._id.toString()) !== userIdByToken || (user === null || user === void 0 ? void 0 : user._id.toString()) !== userIdFromParams)
         return res.status(401).json({ message: "Só é possivel atualizar informações do mesmo usuário logado" });
     const checkPassword = yield bcrypt_1.default.compare(password, ((user === null || user === void 0 ? void 0 : user.password) || ''));
     const salt = yield bcrypt_1.default.genSalt(12);
@@ -111,7 +112,7 @@ const getUserById = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.status(200).json({ user });
     }
     catch (err) {
-        res.status(400).json({ message: "Id inválido" });
+        res.status(401).json({ message: "Id inválido" });
     }
 });
 exports.getUserById = getUserById;

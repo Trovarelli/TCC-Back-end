@@ -8,7 +8,8 @@ import { UserModel } from "../models";
 
 export const updateUserController = async (req: Request, res: Response) => {
     const { name, email, password, company, photo } = req.body
-
+    const userIdFromParams = req.params.id;
+    
     if (!name) return res.status(400).json({ message: "O nome é obrigatório" })
 
     if (!email) return res.status(400).json({ message: "O e-mail é obrigatório" })
@@ -18,7 +19,7 @@ export const updateUserController = async (req: Request, res: Response) => {
     const user = await findUserByEmail(email)
     const userIdByToken = getUserIdByToken(req)
 
-    if(user?._id.toString() !== userIdByToken) 
+    if(user?._id.toString() !== userIdByToken || user?._id.toString() !== userIdFromParams) 
         return res.status(401).json({ message: "Só é possivel atualizar informações do mesmo usuário logado" })
 
     const checkPassword = await bcrypt.compare(password, (user?.password || ''))
@@ -116,6 +117,6 @@ export const getUserById = async (req: Request, res: Response) => {
         res.status(200).json({ user })
     }
     catch (err) {
-        res.status(400).json({ message: "Id inválido" })
+        res.status(401).json({ message: "Id inválido" })
     }
 }

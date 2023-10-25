@@ -17,7 +17,7 @@ const checkToken = (req, res, next) => {
     }
     catch (error) {
         console.log(error);
-        res.status(400).json({ message: "Token inválido" });
+        res.status(401).json({ message: "Token inválido" });
     }
 };
 exports.checkToken = checkToken;
