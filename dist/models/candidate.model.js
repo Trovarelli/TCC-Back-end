@@ -9,11 +9,15 @@ const CandidateSchema = new mongoose_1.default.Schema({
     nome: { type: String, required: true },
     idade: { type: Number, required: false, readonly: true },
     sourceId: { type: String, required: true },
-    dadosGerais: { type: String, required: false, readonly: true },
     favorito: { type: Boolean, required: false, default: false },
+    experiencia: { type: (Array), required: false, readonly: true },
     curriculo: { type: String, required: true, readonly: true },
     telefone: { type: (Array), required: false, readonly: true },
     email: { type: String, required: false, readonly: true },
+    genero: { type: String, required: false, readonly: true },
+    pcd: { type: Boolean, required: false, readonly: true },
+    lgbtq: { type: Boolean, required: false, readonly: true },
+    nivelProfissional: { type: String, required: false, readonly: true }
 });
 const Candidate = mongoose_1.default.model("Candidate", CandidateSchema);
 exports.Candidate = Candidate;

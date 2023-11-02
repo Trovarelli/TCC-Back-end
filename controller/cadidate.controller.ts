@@ -35,7 +35,6 @@ export const createCandidateController = async (req: Request, res: Response) => 
             curriculo: curriculum,
             sourceId,
             favorito: false,
-            dadosGerais: '',
             ...generalData
         }
 

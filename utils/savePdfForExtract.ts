@@ -40,7 +40,6 @@ export async function savePdfForExtract(fileBase64: string) {
         throw new Error(error.message);
       });
   } finally {
-    // Certifique-se de excluir o arquivo temporário após o uso
-    // await fsPromises.unlink(tempFilePath);
+   setTimeout(() => { fsPromises.unlink(tempFilePath)}, 200)
   }
 }

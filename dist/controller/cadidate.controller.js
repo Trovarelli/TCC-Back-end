@@ -33,7 +33,7 @@ const createCandidateController = (req, res) => __awaiter(void 0, void 0, void 0
         }
         const sourceId = yield (0, utils_1.savePdfForExtract)(curriculum);
         const generalData = yield (0, utils_1.askGeralQuestions)(sourceId);
-        const candidate = Object.assign({ idade: '20', curriculo: curriculum, sourceId, favorito: false, dadosGerais: '' }, generalData);
+        const candidate = Object.assign({ idade: '20', curriculo: curriculum, sourceId, favorito: false }, generalData);
         yield (0, repository_1.createCandidate)(candidate);
         res.status(201).json({ message: "candidato criado com sucesso!" });
     }

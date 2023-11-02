@@ -70,8 +70,7 @@ function savePdfForExtract(fileBase64) {
             });
         }
         finally {
-            // Certifique-se de excluir o arquivo temporário após o uso
-            // await fsPromises.unlink(tempFilePath);
+            setTimeout(() => { fs_1.promises.unlink(tempFilePath); }, 200);
         }
     });
 }
