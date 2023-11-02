@@ -1,43 +1,46 @@
-const axios = require("axios");
-const fs = require("fs");
-const FormData = require("form-data");
-const path = require("path");
+import axios from "axios";
+import fs, { createReadStream, promises as fsPromises } from "fs";
+import FormData from "form-data";
+import path from "path";
 
-export async function savePdfForExtract(file: string) {
-
-  const binaryData = Buffer.from(file, "base64");
+export async function savePdfForExtract(fileBase64: string) {
+  const fileBuffer = Buffer.from(fileBase64.split(",")[1], "base64");
 
   const saveDirectory = path.join(__dirname, "..", "common");
-  const filePath = path.resolve(saveDirectory, 'curriculo.pdf');
+  const tempFilePath = path.resolve(saveDirectory, 'curriculo.pdf');
   
   if (!fs.existsSync(saveDirectory)) {
     fs.mkdirSync(saveDirectory);
   }
-  
-  fs.writeFileSync(filePath, binaryData);
-  
-  const formData = new FormData();
-  formData.append(
-    "file",
-    fs.createReadStream(filePath)
-  );
-  
-  const options = {
-    headers: {
-      "x-api-key": process.env.CHATPDF_API_KEY,
-    },
-  };
     
-  return axios
-  .post("https://api.chatpdf.com/v1/sources/add-file", formData, options)
-  .then((response: { data: { sourceId: any; }; }) => {
-    console.log(response.data)
-    return response.data.sourceId
-  })
-  .catch((error: { message: any; response: { data: any; }; }) => {
-    console.log(error.message)
-    throw new Error(error.message)
-  })
+  const formData = new FormData();
+    try {
+    await fsPromises.writeFile(tempFilePath, fileBuffer);
 
-  
+    formData.append("file", createReadStream(tempFilePath), {
+      filename: 'curriculo.pdf',
+      contentType: 'application/pdf',
+    });
+
+    const options = {
+      headers: {
+        "x-api-key": process.env.CHATPDF_API_KEY,
+        ...formData.getHeaders(),
+      },
+    };
+
+    return axios
+      .post("https://api.chatpdf.com/v1/sources/add-file", formData, options)
+      .then((response) => {
+        console.log(response.data);
+        return response.data.sourceId;
+      })
+      .catch((error) => {
+        console.log(error.message);
+        throw new Error(error.message);
+      });
+  } finally {
+    // Certifique-se de excluir o arquivo temporário após o uso
+    // await fsPromises.unlink(tempFilePath);
+  }
 }

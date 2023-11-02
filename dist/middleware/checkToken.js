@@ -21,3 +21,4 @@ const checkToken = (req, res, next) => {
     }
 };
 exports.checkToken = checkToken;
+//# sourceMappingURL=checkToken.js.map

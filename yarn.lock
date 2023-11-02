@@ -1348,6 +1348,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/pdf-parse@npm:^1.1.3":
+  version: 1.1.3
+  resolution: "@types/pdf-parse@npm:1.1.3"
+  checksum: 9188c471fbeb7e52cbcecc67404664f459ccd7492f6d1256a18a387154f69b9b5b90a0438f4d41c0c1e2093a6ba293f95d28b0b80b5c85c739165976e12f7c62
+  languageName: node
+  linkType: hard
+
 "@types/qs@npm:*":
   version: 6.9.7
   resolution: "@types/qs@npm:6.9.7"
@@ -1397,13 +1404,6 @@ __metadata:
     "@types/node": "*"
     "@types/webidl-conversions": "*"
   checksum: 5dc5afe078dfa1a8a266745586fa3db9baa8ce7cc904789211d1dca1d34d7f3dd17d0b7423c36bc9beab9d98aa99338f1fc60798c0af6cbb8356f20e20d9f243
-  languageName: node
-  linkType: hard
-
-"@xmldom/xmldom@npm:^0.8.6":
-  version: 0.8.10
-  resolution: "@xmldom/xmldom@npm:0.8.10"
-  checksum: 4c136aec31fb3b49aaa53b6fcbfe524d02a1dc0d8e17ee35bd3bf35e9ce1344560481cd1efd086ad1a4821541482528672306d5e37cdbd187f33d7fadd3e2cf0
   languageName: node
   linkType: hard
 
@@ -1594,8 +1594,10 @@ __metadata:
     "@types/express": ^4.17.17
     "@types/jsonwebtoken": ^9.0.1
     "@types/node": ^20.3.1
+    "@types/pdf-parse": ^1.1.3
     axios: ^1.5.1
     bcrypt: ^5.1.0
+    buffer: ^6.0.3
     concurrently: ^7.6.0
     cors: ^2.8.5
     dotenv: ^16.0.3
@@ -1604,7 +1606,7 @@ __metadata:
     mongoose: ^6.9.2
     nodemon: ^2.0.21
     npm: ^10.2.0
-    pdfreader: ^3.0.2
+    pdf-parse: ^1.1.1
     typescript: ^4.9.5
   languageName: unknown
   linkType: soft
@@ -2098,7 +2100,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:^3.2.7":
+"debug@npm:^3.1.0, debug@npm:^3.2.7":
   version: 3.2.7
   resolution: "debug@npm:3.2.7"
   dependencies:
@@ -3461,6 +3463,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"node-ensure@npm:^0.0.0":
+  version: 0.0.0
+  resolution: "node-ensure@npm:0.0.0"
+  checksum: 1124623beb1dec66889794286ec1761ac3bfac42ce93b8652903efa5af14227edce5bafa06c4e0675cdc850360931d7c9413e3b5406150f05b2c9bf5bb3ccce4
+  languageName: node
+  linkType: hard
+
 "node-fetch@npm:^2.6.7":
   version: 2.6.11
   resolution: "node-fetch@npm:2.6.11"
@@ -3912,23 +3921,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pdf2json@npm:3.0.1":
-  version: 3.0.1
-  resolution: "pdf2json@npm:3.0.1"
+"pdf-parse@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "pdf-parse@npm:1.1.1"
   dependencies:
-    "@xmldom/xmldom": ^0.8.6
-  bin:
-    pdf2json: bin/pdf2json
-  checksum: cc5953930c6cf3eff64468a189a99753f8caaf08075dfaf38d631f47679c549b98b5a0ee7fb9b55c21e4594d78494ccefe9a46f4ca9ece8b9045765d84f352ce
-  languageName: node
-  linkType: hard
-
-"pdfreader@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "pdfreader@npm:3.0.2"
-  dependencies:
-    pdf2json: 3.0.1
-  checksum: aeb6c7bda04bffa8a81ce6f86378324514b2c9c5acc0f70ae2f9c8e120cf1a0f78b6d8c43335afb39f12d6d2d7be800443df4ed6872caa8380f5572fb79b4c1d
+    debug: ^3.1.0
+    node-ensure: ^0.0.0
+  checksum: 5d63a8be1b3b8915618b1b76350409513fdd7fe03c77056b2dd7a1c2da28a11e297645e33bb4e953e2c1cd0ae66980f30fd0bed2979877f894347962d9647241
   languageName: node
   linkType: hard
 

@@ -13,3 +13,4 @@ const getUserIdByToken = (req) => {
     return decoded === null || decoded === void 0 ? void 0 : decoded.key;
 };
 exports.getUserIdByToken = getUserIdByToken;
+//# sourceMappingURL=getUserIdByToken.js.map

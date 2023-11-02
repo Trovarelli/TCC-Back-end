@@ -1,4 +1,4 @@
-const axios = require("axios");
+import axios from "axios";
 
 export async function askGeralQuestions(sourceId: string) {
   const config = {
@@ -13,7 +13,7 @@ export async function askGeralQuestions(sourceId: string) {
     "messages": [
       {
         "role": "user",
-        "content": "How much is the world?"
+        "content": "Esse é um curriculo de uma pessoa, quero que voce pegue o nome, email e telefone (esse campo deve ser um array) e escreva como se fosse um json"
       }
     ]
   };
@@ -21,14 +21,14 @@ export async function askGeralQuestions(sourceId: string) {
   const retorno = axios
   .post("https://api.chatpdf.com/v1/chats/message", data, config)
   .then((response: { data: { content: any; }; }) => {
-    console.log("Result:", response.data.content);
-    return response.data.content
+    const resposta  = '{' + response?.data?.content?.split('{').slice(1).join('')
+    console.log('RESPOSTA',  JSON.parse(resposta))
+
+    return JSON.parse(resposta)
   })
-  .catch((error: { message: any; response: { data: any; }; }) => {
-    console.log(error.response.data)
+  .catch((error: { message: string; }) => {
     throw new Error(error.message)
   })
 
   return retorno
-
 }

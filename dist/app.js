@@ -54,3 +54,4 @@ mongoose_1.default.connect(`mongodb+srv://${dbUser}:${dbPassword}@cluster0.xn3pg
     app.listen(3001);
     console.log("Conexão realizada");
 }).catch((err) => console.log(err));
+//# sourceMappingURL=app.js.map

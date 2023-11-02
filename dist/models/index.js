@@ -17,3 +17,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./candidate.model"), exports);
 __exportStar(require("./job.model"), exports);
 __exportStar(require("./user.model"), exports);
+//# sourceMappingURL=index.js.map

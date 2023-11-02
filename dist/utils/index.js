@@ -17,3 +17,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./savePdfForExtract"), exports);
 __exportStar(require("./askGeralQuestions"), exports);
 __exportStar(require("./getUserIdByToken"), exports);
+//# sourceMappingURL=index.js.map

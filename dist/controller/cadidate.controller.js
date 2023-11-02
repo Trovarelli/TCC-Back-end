@@ -31,18 +31,9 @@ const createCandidateController = (req, res) => __awaiter(void 0, void 0, void 0
             res.status(400).json({ message: "por favor faça o upload do curriculo" });
             return;
         }
-        console.log(typeof curriculum);
         const sourceId = yield (0, utils_1.savePdfForExtract)(curriculum);
-        console.log(sourceId);
         const generalData = yield (0, utils_1.askGeralQuestions)(sourceId);
-        const candidate = {
-            age: '20',
-            curriculum,
-            sourceId,
-            favorite: false,
-            generalData,
-            name: 'teste'
-        };
+        const candidate = Object.assign({ idade: '20', curriculo: curriculum, sourceId, favorito: false, dadosGerais: '' }, generalData);
         yield (0, repository_1.createCandidate)(candidate);
         res.status(201).json({ message: "candidato criado com sucesso!" });
     }
@@ -52,3 +43,4 @@ const createCandidateController = (req, res) => __awaiter(void 0, void 0, void 0
     }
 });
 exports.createCandidateController = createCandidateController;
+//# sourceMappingURL=cadidate.controller.js.map

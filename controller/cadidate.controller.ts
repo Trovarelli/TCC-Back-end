@@ -26,21 +26,17 @@ export const createCandidateController = async (req: Request, res: Response) => 
             return
         }
 
-        console.log(typeof curriculum)
-
         const sourceId = await savePdfForExtract(curriculum)
 
-        console.log(sourceId)
-
-        const generalData = await askGeralQuestions(sourceId)
+        const generalData: Object = await askGeralQuestions(sourceId)
        
         const candidate: CandidateModel = {
-            age: '20',
-            curriculum,
+            idade: '20',
+            curriculo: curriculum,
             sourceId,
-            favorite: false,
-            generalData,
-            name: 'teste'
+            favorito: false,
+            dadosGerais: '',
+            ...generalData
         }
 
         await createCandidate(candidate)

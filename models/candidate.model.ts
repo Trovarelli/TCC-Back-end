@@ -1,21 +1,24 @@
 import mongoose from "mongoose";
 
 interface CandidateModel {
-    name?: string
+    nome?: string
     sourceId: string
-    age: string
-    generalData?: string
-    favorite?: boolean
-    curriculum: string
+    idade: string
+    dadosGerais?: string
+    favorito?: boolean
+    curriculo: string,
+    telefone?: string[]
 }
 
 const CandidateSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    age: { type: Number, required: false, readonly: true },
+    nome: { type: String, required: true },
+    idade: { type: Number, required: false, readonly: true },
     sourceId: { type: String, required: true},
-    generalData: { type: String, required: false, readonly: true },
-    favorite: { type: Boolean, required: false, default: false },
-    curriculum: { type: String, required: true, readonly: true }
+    dadosGerais: { type: String, required: false, readonly: true },
+    favorito: { type: Boolean, required: false, default: false },
+    curriculo: { type: String, required: true, readonly: true },
+    telefone: {type: Array<String>, required: false, readonly: true},
+    email: {type: String, required: false, readonly: true}, 
 });
 
 const Candidate = mongoose.model("Candidate", CandidateSchema);
