@@ -32,7 +32,6 @@ export async function savePdfForExtract(fileBase64: string) {
     return axios
       .post("https://api.chatpdf.com/v1/sources/add-file", formData, options)
       .then((response) => {
-        console.log(response.data);
         return response.data.sourceId;
       })
       .catch((error) => {

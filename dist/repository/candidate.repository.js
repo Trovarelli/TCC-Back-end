@@ -9,15 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findCandidates = exports.createCandidate = void 0;
+exports.deleteCandidate = exports.findCandidatesByUser = exports.createCandidate = void 0;
 const models_1 = require("../models");
 const createCandidate = (candidato) => __awaiter(void 0, void 0, void 0, function* () {
     const CandidateModel = new models_1.Candidate(candidato);
     return models_1.Candidate.create(CandidateModel);
 });
 exports.createCandidate = createCandidate;
-const findCandidates = () => __awaiter(void 0, void 0, void 0, function* () {
-    return models_1.Candidate.find();
+const findCandidatesByUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    return models_1.Candidate.find({ userId }, '-userId -sourceId');
 });
-exports.findCandidates = findCandidates;
+exports.findCandidatesByUser = findCandidatesByUser;
+const deleteCandidate = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    return models_1.Candidate.findByIdAndDelete({ _id: id });
+});
+exports.deleteCandidate = deleteCandidate;
 //# sourceMappingURL=candidate.repository.js.map

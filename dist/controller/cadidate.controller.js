@@ -9,31 +9,54 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createCandidateController = exports.getCadidateController = void 0;
+exports.createCandidateController = exports.deleteCadidateController = exports.getCadidateController = void 0;
 const repository_1 = require("../repository");
 const utils_1 = require("../utils");
-const getCadidateController = (res) => __awaiter(void 0, void 0, void 0, function* () {
+const getCadidateController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userIdByToken = (0, utils_1.getUserIdByToken)(req);
+    const userIdFromParams = req.params.id;
+    if (userIdFromParams !== userIdByToken)
+        return res.status(401).json({ message: "Um usuário não pode visualzar candidatos de outro usuário." });
     try {
-        const user = yield (0, repository_1.findCandidates)();
-        if (!user)
-            return res.status(404).json({ message: "Candidato não encontrado" });
-        res.status(200).json({ user });
+        const candidates = yield (0, repository_1.findCandidatesByUser)(userIdFromParams);
+        if (candidates.length === 0)
+            return res.status(404).json({ message: "Nenhum candidato encontrado." });
+        res.status(200).json([...candidates]);
     }
     catch (err) {
-        res.status(401).json({ message: "inválido" });
+        res.status(401).json({ message: "Erro interno." });
     }
 });
 exports.getCadidateController = getCadidateController;
+const deleteCadidateController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userIdByToken = (0, utils_1.getUserIdByToken)(req);
+    const userIdFromParams = req.params.id;
+    if (userIdFromParams !== userIdByToken)
+        return res.status(401).json({ message: "Um usuário não pode remover registros de outro usuário." });
+    try {
+        (0, repository_1.deleteCandidate)(userIdFromParams)
+            .then(() => res.status(200).json({ message: "Candidato removido com sucesso." }))
+            .catch(() => res.status(401).json({ message: "Erro ao remover candidato." }));
+    }
+    catch (err) {
+        res.status(401).json({ message: "Erro interno." });
+    }
+});
+exports.deleteCadidateController = deleteCadidateController;
 const createCandidateController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userIdByToken = (0, utils_1.getUserIdByToken)(req);
+    const userIdFromParams = req.params.id;
+    if (userIdFromParams !== userIdByToken)
+        return res.status(401).json({ message: "Um usuário não pode criar candidatos em nome de outro usuário." });
     try {
         const { curriculum } = req.body;
         if (!curriculum) {
-            res.status(400).json({ message: "por favor faça o upload do curriculo" });
+            res.status(400).json({ message: "Por favor faça o upload do curriculo" });
             return;
         }
         const sourceId = yield (0, utils_1.savePdfForExtract)(curriculum);
         const generalData = yield (0, utils_1.askGeralQuestions)(sourceId);
-        const candidate = Object.assign({ idade: '20', curriculo: curriculum, sourceId, favorito: false }, generalData);
+        const candidate = Object.assign(Object.assign({}, generalData), { userId: userIdFromParams, curriculo: curriculum, sourceId, favorito: false });
         yield (0, repository_1.createCandidate)(candidate);
         res.status(201).json({ message: "candidato criado com sucesso!" });
     }

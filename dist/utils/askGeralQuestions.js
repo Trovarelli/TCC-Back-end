@@ -48,9 +48,8 @@ function askGeralQuestions(sourceId) {
         const retorno = axios_1.default
             .post("https://api.chatpdf.com/v1/chats/message", data, config)
             .then((response) => {
-            var _a, _b, _c, _d, _e, _f;
-            console.log(((_a = response === null || response === void 0 ? void 0 : response.data) === null || _a === void 0 ? void 0 : _a.content.split('')[0]) !== '{' ? '{' + ((_b = response === null || response === void 0 ? void 0 : response.data) === null || _b === void 0 ? void 0 : _b.content.split('{')[1]) : (_c = response === null || response === void 0 ? void 0 : response.data) === null || _c === void 0 ? void 0 : _c.content);
-            return JSON.parse(((_d = response === null || response === void 0 ? void 0 : response.data) === null || _d === void 0 ? void 0 : _d.content.split('')[0]) !== '{' ? '{' + ((_e = response === null || response === void 0 ? void 0 : response.data) === null || _e === void 0 ? void 0 : _e.content.split('{')[1]) : (_f = response === null || response === void 0 ? void 0 : response.data) === null || _f === void 0 ? void 0 : _f.content);
+            var _a, _b, _c;
+            return JSON.parse(((_a = response === null || response === void 0 ? void 0 : response.data) === null || _a === void 0 ? void 0 : _a.content.split('')[0]) !== '{' ? '{' + ((_b = response === null || response === void 0 ? void 0 : response.data) === null || _b === void 0 ? void 0 : _b.content.split('{')[1]) : (_c = response === null || response === void 0 ? void 0 : response.data) === null || _c === void 0 ? void 0 : _c.content);
         })
             .catch((error) => {
             throw new Error(error.message);

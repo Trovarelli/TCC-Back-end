@@ -5,6 +5,7 @@ interface CandidateModel {
     sourceId: string
     idade: number
     favorito?: boolean
+    userId: string
     curriculo: string
     telefone?: string[]
     genero?: 'M' | 'F'
@@ -18,6 +19,7 @@ const CandidateSchema = new mongoose.Schema({
     nome: { type: String, required: true },
     idade: { type: Number, required: false, readonly: true },
     sourceId: { type: String, required: true},
+    userId: { type: String, required: true, readonly: true },
     favorito: { type: Boolean, required: false, default: false },
     experiencia: { type: Array<String>, required: false, readonly: true },
     curriculo: { type: String, required: true, readonly: true },

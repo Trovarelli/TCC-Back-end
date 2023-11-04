@@ -61,7 +61,6 @@ function savePdfForExtract(fileBase64) {
             return axios_1.default
                 .post("https://api.chatpdf.com/v1/sources/add-file", formData, options)
                 .then((response) => {
-                console.log(response.data);
                 return response.data.sourceId;
             })
                 .catch((error) => {

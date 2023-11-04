@@ -1,6 +1,6 @@
 import express from 'express'
 import mongoose from 'mongoose'
-import { createUserController, loginController, createCandidateController, getCadidateController, updateUserController } from './controller'
+import { createUserController, loginController, createCandidateController, getCadidateController, updateUserController, deleteCadidateController } from './controller'
 import { checkToken } from './middleware'
 
 require('dotenv').config()
@@ -8,19 +8,22 @@ const cors = require('cors')
 
 const app = express()
 
-// CONFIG JSON
 app.use(express.json({limit: '50mb'}))
 
 app.use(cors({
     origin: 'http://localhost:3000'
 }))
 
-app.post('/candidate', function (req, res) {
+app.post('/candidate/:id', checkToken, (req, res) => {
     return createCandidateController(req, res)
 });
 
-app.get('/candidate', function (req, res) {
-    return getCadidateController(res)
+app.post('/candidate/:id', checkToken, (req, res) => {
+    return deleteCadidateController(req, res)
+});
+
+app.get('/candidate/:id', checkToken, (req, res) => {
+    return getCadidateController(req, res)
 });
 
 //ROTA PÚBLICA

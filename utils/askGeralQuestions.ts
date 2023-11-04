@@ -35,7 +35,6 @@ export async function askGeralQuestions(sourceId: string) {
   const retorno = axios
   .post("https://api.chatpdf.com/v1/chats/message", data, config)
   .then((response: { data: { content: any; }; }) => {
-    console.log(response?.data?.content.split('')[0] !== '{' ? '{' + response?.data?.content.split('{')[1] : response?.data?.content)
     return JSON.parse(response?.data?.content.split('')[0] !== '{' ? '{' + response?.data?.content.split('{')[1] : response?.data?.content)
   })
   .catch((error: { message: string; }) => {

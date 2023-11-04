@@ -19,16 +19,18 @@ const middleware_1 = require("./middleware");
 require('dotenv').config();
 const cors = require('cors');
 const app = (0, express_1.default)();
-// CONFIG JSON
 app.use(express_1.default.json({ limit: '50mb' }));
 app.use(cors({
     origin: 'http://localhost:3000'
 }));
-app.post('/candidate', function (req, res) {
+app.post('/candidate/:id', middleware_1.checkToken, (req, res) => {
     return (0, controller_1.createCandidateController)(req, res);
 });
-app.get('/candidate', function (req, res) {
-    return (0, controller_1.getCadidateController)(res);
+app.post('/candidate/:id', middleware_1.checkToken, (req, res) => {
+    return (0, controller_1.deleteCadidateController)(req, res);
+});
+app.get('/candidate/:id', middleware_1.checkToken, (req, res) => {
+    return (0, controller_1.getCadidateController)(req, res);
 });
 //ROTA PÚBLICA
 app.get('/', (req, res) => {
