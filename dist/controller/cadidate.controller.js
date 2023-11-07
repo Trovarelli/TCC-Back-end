@@ -31,10 +31,11 @@ exports.getCadidateController = getCadidateController;
 const deleteCadidateController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userIdByToken = (0, utils_1.getUserIdByToken)(req);
     const userIdFromParams = req.params.id;
+    const candidateId = req.params.candidatoId;
     if (userIdFromParams !== userIdByToken)
         return res.status(401).json({ message: "Um usuário não pode remover registros de outro usuário." });
     try {
-        (0, repository_1.deleteCandidate)(userIdFromParams)
+        (0, repository_1.deleteCandidate)(userIdFromParams, candidateId)
             .then(() => res.status(200).json({ message: "Candidato removido com sucesso." }))
             .catch(() => res.status(401).json({ message: "Erro ao remover candidato." }));
     }

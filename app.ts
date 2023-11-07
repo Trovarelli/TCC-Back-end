@@ -18,7 +18,7 @@ app.post('/candidate/:id', checkToken, (req, res) => {
     return createCandidateController(req, res)
 });
 
-app.post('/candidate/:id', checkToken, (req, res) => {
+app.post('/candidate/:id/:candidatoId', checkToken, (req, res) => {
     return deleteCadidateController(req, res)
 });
 

@@ -26,12 +26,13 @@ export const getCadidateController = async (req: Request, res: Response) => {
 export const deleteCadidateController = async (req: Request, res: Response) => {
     const userIdByToken = getUserIdByToken(req)
     const userIdFromParams = req.params.id
+    const candidateId = req.params.candidatoId
 
     if(userIdFromParams !== userIdByToken) 
         return res.status(401).json({ message: "Um usuário não pode remover registros de outro usuário." })
 
     try {
-        deleteCandidate(userIdFromParams)
+        deleteCandidate(userIdFromParams, candidateId)
             .then(() => res.status(200).json({ message: "Candidato removido com sucesso." }))
             .catch(() => res.status(401).json({ message: "Erro ao remover candidato." }))
     }

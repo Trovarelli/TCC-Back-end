@@ -20,8 +20,8 @@ const findCandidatesByUser = (userId) => __awaiter(void 0, void 0, void 0, funct
     return models_1.Candidate.find({ userId }, '-userId -sourceId');
 });
 exports.findCandidatesByUser = findCandidatesByUser;
-const deleteCandidate = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    return models_1.Candidate.findByIdAndDelete({ _id: id });
+const deleteCandidate = (userId, candidateId) => __awaiter(void 0, void 0, void 0, function* () {
+    return models_1.Candidate.findByIdAndDelete({ _id: candidateId, userId });
 });
 exports.deleteCandidate = deleteCandidate;
 //# sourceMappingURL=candidate.repository.js.map
