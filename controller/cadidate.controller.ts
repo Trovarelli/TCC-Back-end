@@ -8,9 +8,11 @@ import { askGeralQuestions, getUserIdByToken, savePdfForExtract } from "../utils
 export const getCadidateController = async (req: Request, res: Response) => {
     const userIdByToken = getUserIdByToken(req)
     const userIdFromParams = req.params.id
+    const parametros = req.params?.parametros || ''
 
     if(userIdFromParams !== userIdByToken) 
         return res.status(401).json({ message: "Um usuário não pode visualzar candidatos de outro usuário." })
+
 
     try {
         const candidates = await findCandidatesByUser(userIdFromParams)
@@ -72,7 +74,6 @@ export const createCandidateController = async (req: Request, res: Response) => 
         await createCandidate(candidate)
         res.status(201).json({ message: "candidato criado com sucesso!" })
     } catch (error) {
-        console.log(error)
         res.status(500).json({ message: `Erro no servidor: ${error}` })
     }
 

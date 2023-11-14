@@ -1,3 +1,4 @@
+import e from "express";
 import { Candidate, CandidateModel } from "../models";
 
 export const createCandidate = async (candidato: CandidateModel) => {
@@ -5,7 +6,13 @@ export const createCandidate = async (candidato: CandidateModel) => {
     return Candidate.create(CandidateModel)
 }
 
-export const findCandidatesByUser = async (userId: string) => {
+export const findCandidatesByUser = async (userId: string, parametros?: {
+    genero: 'M' | 'F' | 'O',
+    nome: string,
+    idade: number,
+    escolaridade: string,
+    experiencia: string,
+}) => {
     return Candidate.find({userId}, '-userId -sourceId')
 }
 

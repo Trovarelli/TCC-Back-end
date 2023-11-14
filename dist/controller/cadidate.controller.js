@@ -13,8 +13,10 @@ exports.createCandidateController = exports.deleteCadidateController = exports.g
 const repository_1 = require("../repository");
 const utils_1 = require("../utils");
 const getCadidateController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     const userIdByToken = (0, utils_1.getUserIdByToken)(req);
     const userIdFromParams = req.params.id;
+    const parametros = ((_a = req.params) === null || _a === void 0 ? void 0 : _a.parametros) || '';
     if (userIdFromParams !== userIdByToken)
         return res.status(401).json({ message: "Um usuário não pode visualzar candidatos de outro usuário." });
     try {
@@ -62,7 +64,6 @@ const createCandidateController = (req, res) => __awaiter(void 0, void 0, void 0
         res.status(201).json({ message: "candidato criado com sucesso!" });
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({ message: `Erro no servidor: ${error}` });
     }
 });

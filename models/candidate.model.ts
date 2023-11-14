@@ -7,18 +7,21 @@ interface CandidateModel {
     favorito?: boolean
     userId: string
     curriculo: string
+    competencias?: string[]
     telefone?: string[]
     genero?: 'M' | 'F'
     experiencia?: string[]
     pcd?: boolean
     lgbtq?: boolean
-    nivelProfissional?: 'estagiario' | 'junior' | 'pleno' | 'senior'
+    nivelProfissional?: 'estagiario' | 'junior' | 'pleno' | 'senior',
+    email?: string
 }
 
 const CandidateSchema = new mongoose.Schema({
     nome: { type: String, required: true },
     idade: { type: Number, required: false, readonly: true },
     sourceId: { type: String, required: true},
+    competencias: { type: Array<String>, required: false, readonly: true },
     userId: { type: String, required: true, readonly: true },
     favorito: { type: Boolean, required: false, default: false },
     experiencia: { type: Array<String>, required: false, readonly: true },
