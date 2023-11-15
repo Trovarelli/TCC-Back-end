@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { checkCandidateExistsByText, createCandidate, deleteCandidate, findCandidatesById, findCandidatesByUser } from '../repository'
+import { checkCandidateExistsByText, createCandidate, deleteCandidate, favoriteCandidate, findCandidatesById, findCandidatesByUser } from '../repository'
 import { CandidateModel } from "../models";
 import { askGeralQuestions, getUserIdByToken, savePdfForExtract } from "../utils";
 
@@ -90,7 +90,6 @@ export const getCandidateCurriculumController = async (req: Request, res: Respon
     if(userIdFromParams !== userIdByToken) 
         return res.status(401).json({ message: "Um usuário não pode visualzar candidatos de outro usuário." })
 
-
     try {
         const candidates = await findCandidatesById(userIdFromParams, candidateId)
 
@@ -100,4 +99,23 @@ export const getCandidateCurriculumController = async (req: Request, res: Respon
     catch (err) {
         res.status(401).json({ message: "Erro interno." })
     }
+}
+
+export const favoriteCandidateController = async (req: Request, res: Response) => {
+    const userIdByToken = getUserIdByToken(req)
+    const userIdFromParams = req.params.id
+    const candidateId = req.params.candidatoId
+
+    if(userIdFromParams !== userIdByToken) 
+        return res.status(401).json({ message: "Um usuário não pode alterar os dados de candidatos de outro usuário." })
+
+        try {
+            const candidates = await favoriteCandidate(userIdFromParams, candidateId, req.body?.favorito || true)
+    
+            if (!candidates) return res.status(404).json({ message: "Nenhum candidato encontrado." })
+            res.status(200).json({ message: "Candidato favoritado com sucesso." })
+        }
+        catch (err) {
+            res.status(401).json({ message: "Erro interno." })
+        }
 }

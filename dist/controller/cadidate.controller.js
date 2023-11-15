@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCandidateCurriculumController = exports.createCandidateController = exports.deleteCadidateController = exports.getCadidateController = void 0;
+exports.favoriteCandidateController = exports.getCandidateCurriculumController = exports.createCandidateController = exports.deleteCadidateController = exports.getCadidateController = void 0;
 const repository_1 = require("../repository");
 const utils_1 = require("../utils");
 const getCadidateController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -88,4 +88,22 @@ const getCandidateCurriculumController = (req, res) => __awaiter(void 0, void 0,
     }
 });
 exports.getCandidateCurriculumController = getCandidateCurriculumController;
+const favoriteCandidateController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b;
+    const userIdByToken = (0, utils_1.getUserIdByToken)(req);
+    const userIdFromParams = req.params.id;
+    const candidateId = req.params.candidatoId;
+    if (userIdFromParams !== userIdByToken)
+        return res.status(401).json({ message: "Um usuário não pode alterar os dados de candidatos de outro usuário." });
+    try {
+        const candidates = yield (0, repository_1.favoriteCandidate)(userIdFromParams, candidateId, ((_b = req.body) === null || _b === void 0 ? void 0 : _b.favorito) || true);
+        if (!candidates)
+            return res.status(404).json({ message: "Nenhum candidato encontrado." });
+        res.status(200).json({ message: "Candidato favoritado com sucesso." });
+    }
+    catch (err) {
+        res.status(401).json({ message: "Erro interno." });
+    }
+});
+exports.favoriteCandidateController = favoriteCandidateController;
 //# sourceMappingURL=cadidate.controller.js.map

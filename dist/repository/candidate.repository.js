@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkCandidateExistsByText = exports.findCandidatesById = exports.deleteCandidate = exports.findCandidatesByUser = exports.createCandidate = void 0;
+exports.favoriteCandidate = exports.checkCandidateExistsByText = exports.findCandidatesById = exports.deleteCandidate = exports.findCandidatesByUser = exports.createCandidate = void 0;
 const models_1 = require("../models");
 const createCandidate = (candidato) => __awaiter(void 0, void 0, void 0, function* () {
     const CandidateModel = new models_1.Candidate(candidato);
@@ -32,4 +32,8 @@ const checkCandidateExistsByText = (userId, text) => __awaiter(void 0, void 0, v
     return (yield models_1.Candidate.find({ userId, texto: text, }, '-userId')).length > 0;
 });
 exports.checkCandidateExistsByText = checkCandidateExistsByText;
+const favoriteCandidate = (userId, candidateId, favorite) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield models_1.Candidate.updateOne({ _id: candidateId, userId }, { favorito: favorite });
+});
+exports.favoriteCandidate = favoriteCandidate;
 //# sourceMappingURL=candidate.repository.js.map

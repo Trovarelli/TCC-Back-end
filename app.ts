@@ -1,6 +1,6 @@
 import express from 'express'
 import mongoose from 'mongoose'
-import { createUserController, loginController, createCandidateController, getCadidateController, updateUserController, deleteCadidateController, getCandidateCurriculumController } from './controller'
+import { createUserController, loginController, createCandidateController, getCadidateController, updateUserController, deleteCadidateController, getCandidateCurriculumController, favoriteCandidateController } from './controller'
 import { checkToken } from './middleware'
 
 require('dotenv').config()
@@ -22,10 +22,13 @@ app.post('/candidate/:id/:candidatoId', checkToken, (req, res) => {
     return deleteCadidateController(req, res)
 });
 
-app.get('/candidate/:id/:candidatoId', checkToken, (req, res) => {
+app.get('/candidate/curriculum/:id/:candidatoId', checkToken, (req, res) => {
     return getCandidateCurriculumController(req, res)
 });
 
+app.post('/candidate/favorite/:id/:candidatoId', checkToken, (req, res) => {
+    return favoriteCandidateController(req, res)
+});
 
 app.get('/candidate/:id', checkToken, (req, res) => {
     return getCadidateController(req, res)

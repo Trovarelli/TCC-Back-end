@@ -14,14 +14,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.askGeralQuestions = void 0;
 const openai_1 = __importDefault(require("openai"));
-function askGeralQuestions(sourceId) {
+function askGeralQuestions(curriculo) {
     return __awaiter(this, void 0, void 0, function* () {
         const openai = new openai_1.default({
             apiKey: process.env.GPT_API_KEY
         });
         const chatCompletion = yield openai.chat.completions.create({
             messages: [{ role: 'user', content: `
-    ${sourceId}
+    ${curriculo}
     Desconsidere respostas anteriores. Esse é um curriculo de uma pessoa, quero que voce extraia as seguintes informações, profissao, escolaridade, nome, idade, email, experiencia, telefone, genero, pcd, competencias, lgbtq, nivelProfissional e a resposta deve ser estruturada desta forma no formato json. Não é obrigatorio preencher todos os campos {
       nome: string (este campo deve conter o nome da pessoa)
       idade: number (este campo deve ser um numero, caso a idade seja fornecida como data calcular o ano de nascimento - até o ano atual, se não for informado, deve ser 0)

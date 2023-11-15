@@ -26,3 +26,7 @@ export const findCandidatesById = async (userId: string, candidateId: string) =>
 export const checkCandidateExistsByText = async (userId: string, text: string) => {
     return (await Candidate.find({userId, texto: text,}, '-userId')).length > 0
 }
+
+export const favoriteCandidate = async (userId: string, candidateId: string, favorite: boolean) => {
+    return await Candidate.updateOne({_id: candidateId, userId}, {favorito: favorite})
+}

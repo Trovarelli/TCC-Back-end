@@ -1,6 +1,6 @@
 import OpenAI from 'openai'
 
-export async function askGeralQuestions(sourceId: string) {
+export async function askGeralQuestions(curriculo: string) {
   
   const openai = new OpenAI({
     apiKey: process.env.GPT_API_KEY
@@ -9,7 +9,7 @@ export async function askGeralQuestions(sourceId: string) {
   
   const chatCompletion: OpenAI.Chat.ChatCompletion = await openai.chat.completions.create({
     messages: [{ role: 'user', content: `
-    ${sourceId}
+    ${curriculo}
     Desconsidere respostas anteriores. Esse é um curriculo de uma pessoa, quero que voce extraia as seguintes informações, profissao, escolaridade, nome, idade, email, experiencia, telefone, genero, pcd, competencias, lgbtq, nivelProfissional e a resposta deve ser estruturada desta forma no formato json. Não é obrigatorio preencher todos os campos {
       nome: string (este campo deve conter o nome da pessoa)
       idade: number (este campo deve ser um numero, caso a idade seja fornecida como data calcular o ano de nascimento - até o ano atual, se não for informado, deve ser 0)
