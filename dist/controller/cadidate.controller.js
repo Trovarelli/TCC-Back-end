@@ -57,9 +57,9 @@ const createCandidateController = (req, res) => __awaiter(void 0, void 0, void 0
             res.status(400).json({ message: "Por favor faça o upload do curriculo" });
             return;
         }
-        const sourceId = yield (0, utils_1.savePdfForExtract)(curriculum);
-        const generalData = yield (0, utils_1.askGeralQuestions)(sourceId);
-        const candidate = Object.assign(Object.assign({}, generalData), { userId: userIdFromParams, curriculo: curriculum, sourceId, favorito: false });
+        const dataText = yield (0, utils_1.savePdfForExtract)(curriculum);
+        const generalData = yield (0, utils_1.askGeralQuestions)(dataText);
+        const candidate = Object.assign(Object.assign({}, generalData), { userId: userIdFromParams, curriculo: curriculum, texto: dataText, favorito: false });
         yield (0, repository_1.createCandidate)(candidate);
         res.status(201).json({ message: "candidato criado com sucesso!" });
     }

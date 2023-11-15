@@ -13,49 +13,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.askGeralQuestions = void 0;
-const axios_1 = __importDefault(require("axios"));
+const openai_1 = __importDefault(require("openai"));
 function askGeralQuestions(sourceId) {
     return __awaiter(this, void 0, void 0, function* () {
-        const config = {
-            headers: {
-                "x-api-key": process.env.CHATPDF_API_KEY,
-                "Content-Type": "application/json",
-            },
-        };
-        const data = {
-            sourceId,
-            "messages": [
-                {
-                    "role": "user",
-                    "content": `Esse é um curriculo de uma pessoa, quero que voce pegue o nome, email e telefone (esse campo deve ser um array), genero (se nao for informado, leve em consideração o nome, se é um nome feminino ou masculino, ele deve ser representado pela siga M ou F), e se a pessoa se identifica como LGBTQ  e se a pessoa é uma PCD nivel profissional, caso nao seja informado, leve em consideração o tempo de experiencia na area (sendo que estagiario é 0 a 1 ano de experiencia, junior de 6 meses a 2 anos, pleno de 2 a 4 anos e senior a cima de 4 anos) e escreva como se fosse um json no seguinte formato:
-        {
-          nome: string
-          idade: number
-          email: string
-          experiencia: string[] 'esse campo deve ser um resumo da experiencia profissional da pessoa, precisa ser um array de string'
-          telefone: string[]
-          genero: string
-          pcd: boolean 'esse campo deve ser true caso a pessoa seja portadora de deficiencia, se nao for informado, deve ser false'
-          competencias: string[] 'esse campo deve ser um resumo das competencias da pessoa, precisa ser um array de string'w
-          lgbtq: 'esse campo deve ser true caso a pessoa se idetifique com outro genero alem do masculino e feminino, se nao for informado, deve ser false'
-          nivelProfissional: 'estagiario' | 'junior' | 'pleno' | 'senior', esse campo deve levar em consideração os anos de experiencia profissional na area de tecnologia, somando o tempo em que se passou em cada uma das empresas'
-        }
-
-        DETALHE IMPORTANTE: Caso alguma informação nao seja encontrada, apenas nao colocar no json, nao precisa colocar como null ou undefined, e voce nao deve dizer mais nada, apenas pegar as informações que precisa e retornar igual ao modelo a cima
-        `
-                },
-            ]
-        };
-        const retorno = axios_1.default
-            .post("https://api.chatpdf.com/v1/chats/message", data, config)
-            .then((response) => {
-            var _a;
-            return formatResponse((_a = response === null || response === void 0 ? void 0 : response.data) === null || _a === void 0 ? void 0 : _a.content);
-        })
-            .catch((error) => {
-            throw new Error(error.message);
+        const openai = new openai_1.default({
+            apiKey: process.env.GPT_API_KEY
         });
-        return retorno;
+        const chatCompletion = yield openai.chat.completions.create({
+            messages: [{ role: 'user', content: `
+    ${sourceId}
+    Desconsidere respostas anteriores. Esse é um curriculo de uma pessoa, quero que voce extraia as seguintes informações, nome, idade, email, experiencia, telefone, genero, pcd, competencias, lgbtq, nivelProfissional e a resposta deve ser estruturada desta forma no formato json. Não é obrigatorio preencher todos os campos {
+      nome: string (este campo deve conter o nome da pessoa)
+      idade: number (este campo deve ser um numero, caso a idade seja fornecida como data calcular o ano de nascimento - 2023)
+      email: string (este campo deve conter o email da pessoa)
+      experiencia: string[] (este campo pode conter uma ou mais experiencias profissionais, esta informação deve ser um array de string)
+      telefone: string[] (este campo deve informar um ou mais telefones de contato)
+      genero: string (neste campo deve ser 'M' para masculino ou 'F' para feminino)
+      pcd: boolean (colocar true caso encontrado que seja portador de deficiencias, caso não false)
+      competencias: string[] (este campo deve informar todas as competencias encontradas dentro de um array de string)
+      lgbtq: (esse campo deve ser true caso a pessoa se idetifique com outro genero alem do masculino e feminino, se nao for informado, deve ser false)
+      nivelProfissional: 'estagiario' | 'junior' | 'pleno' | 'senior' (esse campo deve levar em consideração os anos de experiencia profissional na area de tecnologia, somando o tempo em que se passou em cada uma das empresas)
+    }
+    ` }],
+            model: 'gpt-3.5-turbo',
+        });
+        console.log('FORMATED', formatResponse((chatCompletion.choices[0].message.content) || ''));
+        return formatResponse((chatCompletion.choices[0].message.content) || '');
     });
 }
 exports.askGeralQuestions = askGeralQuestions;
@@ -63,6 +46,7 @@ const formatResponse = (response) => {
     var _a;
     console.log(response);
     if (response.includes('{') && response.includes('}')) {
+        console.log('ENTROU NO IF');
         let formattedResponse = response;
         if ((response === null || response === void 0 ? void 0 : response.split('')[0]) !== '{') {
             if ((response === null || response === void 0 ? void 0 : response.split('}')[1]) !== '') {
@@ -70,6 +54,7 @@ const formatResponse = (response) => {
             }
             else
                 formattedResponse = '{' + (response === null || response === void 0 ? void 0 : response.split('{')[1]);
+            console.log('FORMATTED RESPONSE', formattedResponse);
         }
         else if ((response === null || response === void 0 ? void 0 : response.split('}')[1]) !== '') {
             formattedResponse = (response === null || response === void 0 ? void 0 : response.split('}')[0]) + '}';

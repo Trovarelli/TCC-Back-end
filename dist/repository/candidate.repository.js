@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCandidate = exports.findCandidatesByUser = exports.createCandidate = void 0;
+exports.findCandidatesById = exports.deleteCandidate = exports.findCandidatesByUser = exports.createCandidate = void 0;
 const models_1 = require("../models");
 const createCandidate = (candidato) => __awaiter(void 0, void 0, void 0, function* () {
     const CandidateModel = new models_1.Candidate(candidato);
@@ -24,4 +24,8 @@ const deleteCandidate = (userId, candidateId) => __awaiter(void 0, void 0, void 
     return models_1.Candidate.findByIdAndDelete({ _id: candidateId, userId });
 });
 exports.deleteCandidate = deleteCandidate;
+const findCandidatesById = (userId, candidateId) => __awaiter(void 0, void 0, void 0, function* () {
+    return models_1.Candidate.findById({ _id: candidateId, userId }, '-userId');
+});
+exports.findCandidatesById = findCandidatesById;
 //# sourceMappingURL=candidate.repository.js.map

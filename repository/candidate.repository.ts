@@ -1,4 +1,3 @@
-import e from "express";
 import { Candidate, CandidateModel } from "../models";
 
 export const createCandidate = async (candidato: CandidateModel) => {
@@ -18,4 +17,8 @@ export const findCandidatesByUser = async (userId: string, parametros?: {
 
 export const deleteCandidate = async (userId: string, candidateId: string) => {
     return Candidate.findByIdAndDelete({_id: candidateId, userId})
+}
+
+export const findCandidatesById = async (userId: string, candidateId: string) => {
+    return Candidate.findById({_id: candidateId, userId}, '-userId')
 }
