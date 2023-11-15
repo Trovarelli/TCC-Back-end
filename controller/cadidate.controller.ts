@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-
-import { createCandidate, deleteCandidate, findCandidatesByUser } from '../repository'
+import { checkCandidateExistsByText, createCandidate, deleteCandidate, findCandidatesById, findCandidatesByUser } from '../repository'
 import { CandidateModel } from "../models";
 import { askGeralQuestions, getUserIdByToken, savePdfForExtract } from "../utils";
 
@@ -61,6 +60,10 @@ export const createCandidateController = async (req: Request, res: Response) => 
 
         const dataText = await savePdfForExtract(curriculum)
 
+        const candidateExists = await checkCandidateExistsByText(userIdFromParams, dataText)
+
+        if(candidateExists) return res.status(409).json({ message: "Esse curriculo ja está cadastrado na sua base de dados" })
+
         const generalData: CandidateModel = await askGeralQuestions(dataText)
        
         const candidate: CandidateModel = {
@@ -72,9 +75,29 @@ export const createCandidateController = async (req: Request, res: Response) => 
         }
 
         await createCandidate(candidate)
-        res.status(201).json({ message: "candidato criado com sucesso!" })
+        res.status(200).json({ ...candidate})
     } catch (error) {
         res.status(500).json({ message: `Erro no servidor: ${error}` })
     }
 
+}
+
+export const getCandidateCurriculumController = async (req: Request, res: Response) => {
+    const userIdByToken = getUserIdByToken(req)
+    const userIdFromParams = req.params.id
+    const candidateId = req.params.candidatoId
+
+    if(userIdFromParams !== userIdByToken) 
+        return res.status(401).json({ message: "Um usuário não pode visualzar candidatos de outro usuário." })
+
+
+    try {
+        const candidates = await findCandidatesById(userIdFromParams, candidateId)
+
+        if (!candidates) return res.status(404).json({ message: "Nenhum candidato encontrado." })
+        res.status(200).json({ curriculo: candidates.curriculo })
+    }
+    catch (err) {
+        res.status(401).json({ message: "Erro interno." })
+    }
 }

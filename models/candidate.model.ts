@@ -3,9 +3,11 @@ import mongoose from "mongoose";
 interface CandidateModel {
     nome?: string
     texto: string
+    escolaridade: string[]
     idade: number
     favorito?: boolean
     userId: string
+    profissao?: string
     curriculo: string
     competencias?: string[]
     telefone?: string[]
@@ -20,10 +22,12 @@ interface CandidateModel {
 const CandidateSchema = new mongoose.Schema({
     nome: { type: String, required: true },
     idade: { type: Number, required: false, readonly: true },
+    escolaridade: { type: Array<String>, required: false, readonly: true },
     texto: { type: String, required: true},
     competencias: { type: Array<String>, required: false, readonly: true },
     userId: { type: String, required: true, readonly: true },
     favorito: { type: Boolean, required: false, default: false },
+    profissao: { type: String, required: false, readonly: true },
     experiencia: { type: Array<String>, required: false, readonly: true },
     curriculo: { type: String, required: true, readonly: true },
     telefone: {type: Array<String>, required: false, readonly: true},

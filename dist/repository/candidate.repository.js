@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findCandidatesById = exports.deleteCandidate = exports.findCandidatesByUser = exports.createCandidate = void 0;
+exports.checkCandidateExistsByText = exports.findCandidatesById = exports.deleteCandidate = exports.findCandidatesByUser = exports.createCandidate = void 0;
 const models_1 = require("../models");
 const createCandidate = (candidato) => __awaiter(void 0, void 0, void 0, function* () {
     const CandidateModel = new models_1.Candidate(candidato);
@@ -17,7 +17,7 @@ const createCandidate = (candidato) => __awaiter(void 0, void 0, void 0, functio
 });
 exports.createCandidate = createCandidate;
 const findCandidatesByUser = (userId, parametros) => __awaiter(void 0, void 0, void 0, function* () {
-    return models_1.Candidate.find({ userId }, '-userId -sourceId');
+    return models_1.Candidate.find({ userId }, '-userId -sourceId -curriculo');
 });
 exports.findCandidatesByUser = findCandidatesByUser;
 const deleteCandidate = (userId, candidateId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -28,4 +28,8 @@ const findCandidatesById = (userId, candidateId) => __awaiter(void 0, void 0, vo
     return models_1.Candidate.findById({ _id: candidateId, userId }, '-userId');
 });
 exports.findCandidatesById = findCandidatesById;
+const checkCandidateExistsByText = (userId, text) => __awaiter(void 0, void 0, void 0, function* () {
+    return (yield models_1.Candidate.find({ userId, texto: text, }, '-userId')).length > 0;
+});
+exports.checkCandidateExistsByText = checkCandidateExistsByText;
 //# sourceMappingURL=candidate.repository.js.map

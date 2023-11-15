@@ -12,7 +12,7 @@ export const findCandidatesByUser = async (userId: string, parametros?: {
     escolaridade: string,
     experiencia: string,
 }) => {
-    return Candidate.find({userId}, '-userId -sourceId')
+    return Candidate.find({userId}, '-userId -sourceId -curriculo')
 }
 
 export const deleteCandidate = async (userId: string, candidateId: string) => {
@@ -21,4 +21,8 @@ export const deleteCandidate = async (userId: string, candidateId: string) => {
 
 export const findCandidatesById = async (userId: string, candidateId: string) => {
     return Candidate.findById({_id: candidateId, userId}, '-userId')
+}
+
+export const checkCandidateExistsByText = async (userId: string, text: string) => {
+    return (await Candidate.find({userId, texto: text,}, '-userId')).length > 0
 }

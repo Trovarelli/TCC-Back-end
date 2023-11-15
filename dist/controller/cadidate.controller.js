@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createCandidateController = exports.deleteCadidateController = exports.getCadidateController = void 0;
+exports.getCandidateCurriculumController = exports.createCandidateController = exports.deleteCadidateController = exports.getCadidateController = void 0;
 const repository_1 = require("../repository");
 const utils_1 = require("../utils");
 const getCadidateController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -58,14 +58,34 @@ const createCandidateController = (req, res) => __awaiter(void 0, void 0, void 0
             return;
         }
         const dataText = yield (0, utils_1.savePdfForExtract)(curriculum);
+        const candidateExists = yield (0, repository_1.checkCandidateExistsByText)(userIdFromParams, dataText);
+        if (candidateExists)
+            return res.status(409).json({ message: "Esse curriculo ja está cadastrado na sua base de dados" });
         const generalData = yield (0, utils_1.askGeralQuestions)(dataText);
         const candidate = Object.assign(Object.assign({}, generalData), { userId: userIdFromParams, curriculo: curriculum, texto: dataText, favorito: false });
         yield (0, repository_1.createCandidate)(candidate);
-        res.status(201).json({ message: "candidato criado com sucesso!" });
+        res.status(200).json(Object.assign({}, candidate));
     }
     catch (error) {
         res.status(500).json({ message: `Erro no servidor: ${error}` });
     }
 });
 exports.createCandidateController = createCandidateController;
+const getCandidateCurriculumController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userIdByToken = (0, utils_1.getUserIdByToken)(req);
+    const userIdFromParams = req.params.id;
+    const candidateId = req.params.candidatoId;
+    if (userIdFromParams !== userIdByToken)
+        return res.status(401).json({ message: "Um usuário não pode visualzar candidatos de outro usuário." });
+    try {
+        const candidates = yield (0, repository_1.findCandidatesById)(userIdFromParams, candidateId);
+        if (!candidates)
+            return res.status(404).json({ message: "Nenhum candidato encontrado." });
+        res.status(200).json({ curriculo: candidates.curriculo });
+    }
+    catch (err) {
+        res.status(401).json({ message: "Erro interno." });
+    }
+});
+exports.getCandidateCurriculumController = getCandidateCurriculumController;
 //# sourceMappingURL=cadidate.controller.js.map

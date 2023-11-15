@@ -29,6 +29,9 @@ app.post('/candidate/:id', middleware_1.checkToken, (req, res) => {
 app.post('/candidate/:id/:candidatoId', middleware_1.checkToken, (req, res) => {
     return (0, controller_1.deleteCadidateController)(req, res);
 });
+app.get('/candidate/:id/:candidatoId', middleware_1.checkToken, (req, res) => {
+    return (0, controller_1.getCandidateCurriculumController)(req, res);
+});
 app.get('/candidate/:id', middleware_1.checkToken, (req, res) => {
     return (0, controller_1.getCadidateController)(req, res);
 });
