@@ -1,14 +1,11 @@
 import { Candidate, CandidateModel } from "../models";
 
 export const createCandidate = async (candidato: CandidateModel) => {
-    const CandidateModel = new Candidate(candidato)
-    return Candidate.create(CandidateModel)
+    return Candidate.create(candidato).then((data) => data._id)
 }
 
 export const findCandidatesByUser = async (userId: string) => {
-    const a = await Candidate.find({userId}, '-userId -sourceId -curriculo').lean()
-
-    return a
+    return await Candidate.find({userId}, '-userId -sourceId -curriculo').lean()
 }
 
 export const deleteCandidate = async (userId: string, candidateId: string) => {

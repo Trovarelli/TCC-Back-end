@@ -70,27 +70,15 @@ export const createCandidateController = async (req: Request, res: Response) => 
             texto: dataText,
             favorito: false,
         }
+        
+        const id = await createCandidate(candidate)
 
-        const filterField = []
-        for (const key in candidate) {
-            if (candidate.hasOwnProperty(key) && key !== 'userId' && key !== 'curriculo' && key !== 'texto') {
-                const element = candidate[key as keyof typeof candidate];
-                if (element && Array.isArray(element)) {
-                    element.forEach((e) => filterField.push(`${key}:${e.trim()
-                        .replace(/[^\w\s]/gi, "")
-                        .toLowerCase()}`))
-                }
-                if(element) {
-                    filterField.push(`${key}:${String(element)?.trim()
-                        .replace(/[^\w\s]/gi, "")
-                        .toLowerCase()}`)
-                }
-            }
+        const candidateToReturn = {
+            ...candidate,
+            _id: id,
         }
-            
-
-        await createCandidate(candidate)
-        res.status(200).json({ ...candidate})
+        
+        res.status(200).json({ ...candidateToReturn})
     } catch (error) {
         res.status(500).json({ message: `Erro no servidor: ${error}` })
     }

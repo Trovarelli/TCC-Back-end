@@ -45,7 +45,6 @@ const deleteCadidateController = (req, res) => __awaiter(void 0, void 0, void 0,
 });
 exports.deleteCadidateController = deleteCadidateController;
 const createCandidateController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
     const userIdByToken = (0, utils_1.getUserIdByToken)(req);
     const userIdFromParams = req.params.id;
     if (userIdFromParams !== userIdByToken)
@@ -62,22 +61,9 @@ const createCandidateController = (req, res) => __awaiter(void 0, void 0, void 0
             return res.status(409).json({ message: "Esse curriculo ja está cadastrado na sua base de dados" });
         const generalData = yield (0, utils_1.askGeralQuestions)(dataText);
         const candidate = Object.assign(Object.assign({}, generalData), { userId: userIdFromParams, curriculo: curriculum, texto: dataText, favorito: false });
-        const filterField = [];
-        for (const key in candidate) {
-            if (candidate.hasOwnProperty(key) && key !== 'userId' && key !== 'curriculo' && key !== 'texto') {
-                const element = candidate[key];
-                if (element && Array.isArray(element)) {
-                    element.forEach((e) => filterField.push(`${key}:${e.trim()
-                        .replace(/[^\w\s]/gi, "")
-                        .toLowerCase()}`));
-                }
-                if (element) {
-                    filterField.push(`${key}:${(_a = String(element)) === null || _a === void 0 ? void 0 : _a.trim().replace(/[^\w\s]/gi, "").toLowerCase()}`);
-                }
-            }
-        }
-        yield (0, repository_1.createCandidate)(candidate);
-        res.status(200).json(Object.assign({}, candidate));
+        const id = yield (0, repository_1.createCandidate)(candidate);
+        const candidateToReturn = Object.assign(Object.assign({}, candidate), { _id: id });
+        res.status(200).json(Object.assign({}, candidateToReturn));
     }
     catch (error) {
         res.status(500).json({ message: `Erro no servidor: ${error}` });
@@ -102,14 +88,14 @@ const getCandidateCurriculumController = (req, res) => __awaiter(void 0, void 0,
 });
 exports.getCandidateCurriculumController = getCandidateCurriculumController;
 const favoriteCandidateController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _b;
+    var _a;
     const userIdByToken = (0, utils_1.getUserIdByToken)(req);
     const userIdFromParams = req.params.id;
     const candidateId = req.params.candidatoId;
     if (userIdFromParams !== userIdByToken)
         return res.status(401).json({ message: "Um usuário não pode alterar os dados de candidatos de outro usuário." });
     try {
-        const candidates = yield (0, repository_1.favoriteCandidate)(userIdFromParams, candidateId, ((_b = req.body) === null || _b === void 0 ? void 0 : _b.favorito) || true);
+        const candidates = yield (0, repository_1.favoriteCandidate)(userIdFromParams, candidateId, ((_a = req.body) === null || _a === void 0 ? void 0 : _a.favorito) || true);
         if (!candidates)
             return res.status(404).json({ message: "Nenhum candidato encontrado." });
         res.status(200).json({ message: "Candidato favoritado com sucesso." });

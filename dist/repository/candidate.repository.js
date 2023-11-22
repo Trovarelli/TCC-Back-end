@@ -12,13 +12,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.favoriteCandidate = exports.checkCandidateExistsByText = exports.findCandidatesById = exports.deleteCandidate = exports.findCandidatesByUser = exports.createCandidate = void 0;
 const models_1 = require("../models");
 const createCandidate = (candidato) => __awaiter(void 0, void 0, void 0, function* () {
-    const CandidateModel = new models_1.Candidate(candidato);
-    return models_1.Candidate.create(CandidateModel);
+    return models_1.Candidate.create(candidato).then((data) => data._id);
 });
 exports.createCandidate = createCandidate;
 const findCandidatesByUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const a = yield models_1.Candidate.find({ userId }, '-userId -sourceId -curriculo').lean();
-    return a;
+    return yield models_1.Candidate.find({ userId }, '-userId -sourceId -curriculo').lean();
 });
 exports.findCandidatesByUser = findCandidatesByUser;
 const deleteCandidate = (userId, candidateId) => __awaiter(void 0, void 0, void 0, function* () {
