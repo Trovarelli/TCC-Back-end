@@ -1,6 +1,6 @@
 import express from 'express'
 import mongoose from 'mongoose'
-import { createUserController, loginController, createCandidateController, getCadidateController, updateUserController, deleteCadidateController, getCandidateCurriculumController, favoriteCandidateController } from './controller'
+import { createUserController, loginController, createCandidateController, getAllCadidateController, updateUserController, deleteCadidateController, getCandidateCurriculumController, favoriteCandidateController } from './controller'
 import { checkToken } from './middleware'
 
 require('dotenv').config()
@@ -31,7 +31,7 @@ app.post('/candidate/favorite/:id/:candidatoId', checkToken, (req, res) => {
 });
 
 app.get('/candidate/:id', checkToken, (req, res) => {
-    return getCadidateController(req, res)
+    return getAllCadidateController(req, res)
 });
 
 //ROTA PÚBLICA

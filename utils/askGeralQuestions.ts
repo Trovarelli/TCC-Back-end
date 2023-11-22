@@ -18,6 +18,7 @@ export async function askGeralQuestions(curriculo: string) {
       telefone: string[] (este campo deve informar um ou mais telefones de contato)
       genero: string (neste campo deve ser 'M' para masculino ou 'F' para feminino)
       profissao: string (este campo deve conter a profissao da pessoa, se não for informado deve ser vazio '')
+      caracteristicas: string[] (este campo deve conter uma ou mais caracteristicas pessoais, sendo elas softskills e traços de personalidade, por exemplo: resiliente, competitivo, etc. Esta informação deve ser um array de string)
       pcd: boolean (colocar true caso encontrado que seja portador de deficiencias, caso não false)
       escolaridade: string[] (este campo pode conter uma ou mais formações educacionais do candidato de qualquer nível, esta informação deve ser um array de string)
       competencias: string[] (este campo deve informar todas as competencias encontradas dentro de um array de string)

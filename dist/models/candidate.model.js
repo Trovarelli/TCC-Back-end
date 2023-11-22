@@ -15,6 +15,7 @@ const CandidateSchema = new mongoose_1.default.Schema({
     favorito: { type: Boolean, required: false, default: false },
     profissao: { type: String, required: false, readonly: true },
     experiencia: { type: (Array), required: false, readonly: true },
+    caracteristicas: { type: (Array), required: false, readonly: true },
     curriculo: { type: String, required: true, readonly: true },
     telefone: { type: (Array), required: false, readonly: true },
     email: { type: String, required: false, readonly: true },

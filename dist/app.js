@@ -36,7 +36,7 @@ app.post('/candidate/favorite/:id/:candidatoId', middleware_1.checkToken, (req, 
     return (0, controller_1.favoriteCandidateController)(req, res);
 });
 app.get('/candidate/:id', middleware_1.checkToken, (req, res) => {
-    return (0, controller_1.getCadidateController)(req, res);
+    return (0, controller_1.getAllCadidateController)(req, res);
 });
 //ROTA PÚBLICA
 app.get('/', (req, res) => {

@@ -16,8 +16,9 @@ const createCandidate = (candidato) => __awaiter(void 0, void 0, void 0, functio
     return models_1.Candidate.create(CandidateModel);
 });
 exports.createCandidate = createCandidate;
-const findCandidatesByUser = (userId, parametros) => __awaiter(void 0, void 0, void 0, function* () {
-    return models_1.Candidate.find({ userId }, '-userId -sourceId -curriculo');
+const findCandidatesByUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const a = yield models_1.Candidate.find({ userId }, '-userId -sourceId -curriculo').lean();
+    return a;
 });
 exports.findCandidatesByUser = findCandidatesByUser;
 const deleteCandidate = (userId, candidateId) => __awaiter(void 0, void 0, void 0, function* () {

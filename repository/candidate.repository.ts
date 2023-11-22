@@ -5,14 +5,10 @@ export const createCandidate = async (candidato: CandidateModel) => {
     return Candidate.create(CandidateModel)
 }
 
-export const findCandidatesByUser = async (userId: string, parametros?: {
-    genero: 'M' | 'F' | 'O',
-    nome: string,
-    idade: number,
-    escolaridade: string,
-    experiencia: string,
-}) => {
-    return Candidate.find({userId}, '-userId -sourceId -curriculo')
+export const findCandidatesByUser = async (userId: string) => {
+    const a = await Candidate.find({userId}, '-userId -sourceId -curriculo').lean()
+
+    return a
 }
 
 export const deleteCandidate = async (userId: string, candidateId: string) => {

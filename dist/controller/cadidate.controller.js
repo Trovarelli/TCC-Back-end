@@ -9,27 +9,25 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.favoriteCandidateController = exports.getCandidateCurriculumController = exports.createCandidateController = exports.deleteCadidateController = exports.getCadidateController = void 0;
+exports.favoriteCandidateController = exports.getCandidateCurriculumController = exports.createCandidateController = exports.deleteCadidateController = exports.getAllCadidateController = void 0;
 const repository_1 = require("../repository");
 const utils_1 = require("../utils");
-const getCadidateController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
+const getAllCadidateController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userIdByToken = (0, utils_1.getUserIdByToken)(req);
     const userIdFromParams = req.params.id;
-    const parametros = ((_a = req.params) === null || _a === void 0 ? void 0 : _a.parametros) || '';
     if (userIdFromParams !== userIdByToken)
         return res.status(401).json({ message: "Um usuário não pode visualzar candidatos de outro usuário." });
     try {
         const candidates = yield (0, repository_1.findCandidatesByUser)(userIdFromParams);
         if (candidates.length === 0)
             return res.status(404).json({ message: "Nenhum candidato encontrado." });
-        res.status(200).json([...candidates]);
+        res.status(200).json(candidates);
     }
     catch (err) {
         res.status(401).json({ message: "Erro interno." });
     }
 });
-exports.getCadidateController = getCadidateController;
+exports.getAllCadidateController = getAllCadidateController;
 const deleteCadidateController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userIdByToken = (0, utils_1.getUserIdByToken)(req);
     const userIdFromParams = req.params.id;
@@ -47,6 +45,7 @@ const deleteCadidateController = (req, res) => __awaiter(void 0, void 0, void 0,
 });
 exports.deleteCadidateController = deleteCadidateController;
 const createCandidateController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     const userIdByToken = (0, utils_1.getUserIdByToken)(req);
     const userIdFromParams = req.params.id;
     if (userIdFromParams !== userIdByToken)
@@ -63,6 +62,20 @@ const createCandidateController = (req, res) => __awaiter(void 0, void 0, void 0
             return res.status(409).json({ message: "Esse curriculo ja está cadastrado na sua base de dados" });
         const generalData = yield (0, utils_1.askGeralQuestions)(dataText);
         const candidate = Object.assign(Object.assign({}, generalData), { userId: userIdFromParams, curriculo: curriculum, texto: dataText, favorito: false });
+        const filterField = [];
+        for (const key in candidate) {
+            if (candidate.hasOwnProperty(key) && key !== 'userId' && key !== 'curriculo' && key !== 'texto') {
+                const element = candidate[key];
+                if (element && Array.isArray(element)) {
+                    element.forEach((e) => filterField.push(`${key}:${e.trim()
+                        .replace(/[^\w\s]/gi, "")
+                        .toLowerCase()}`));
+                }
+                if (element) {
+                    filterField.push(`${key}:${(_a = String(element)) === null || _a === void 0 ? void 0 : _a.trim().replace(/[^\w\s]/gi, "").toLowerCase()}`);
+                }
+            }
+        }
         yield (0, repository_1.createCandidate)(candidate);
         res.status(200).json(Object.assign({}, candidate));
     }

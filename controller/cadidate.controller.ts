@@ -3,21 +3,18 @@ import { checkCandidateExistsByText, createCandidate, deleteCandidate, favoriteC
 import { CandidateModel } from "../models";
 import { askGeralQuestions, getUserIdByToken, savePdfForExtract } from "../utils";
 
-
-export const getCadidateController = async (req: Request, res: Response) => {
+export const getAllCadidateController = async (req: Request, res: Response) => {
     const userIdByToken = getUserIdByToken(req)
     const userIdFromParams = req.params.id
-    const parametros = req.params?.parametros || ''
-
+   
     if(userIdFromParams !== userIdByToken) 
         return res.status(401).json({ message: "Um usuário não pode visualzar candidatos de outro usuário." })
-
 
     try {
         const candidates = await findCandidatesByUser(userIdFromParams)
 
         if (candidates.length === 0) return res.status(404).json({ message: "Nenhum candidato encontrado." })
-        res.status(200).json([...candidates])
+        res.status(200).json(candidates)
     }
     catch (err) {
         res.status(401).json({ message: "Erro interno." })
@@ -73,6 +70,24 @@ export const createCandidateController = async (req: Request, res: Response) => 
             texto: dataText,
             favorito: false,
         }
+
+        const filterField = []
+        for (const key in candidate) {
+            if (candidate.hasOwnProperty(key) && key !== 'userId' && key !== 'curriculo' && key !== 'texto') {
+                const element = candidate[key as keyof typeof candidate];
+                if (element && Array.isArray(element)) {
+                    element.forEach((e) => filterField.push(`${key}:${e.trim()
+                        .replace(/[^\w\s]/gi, "")
+                        .toLowerCase()}`))
+                }
+                if(element) {
+                    filterField.push(`${key}:${String(element)?.trim()
+                        .replace(/[^\w\s]/gi, "")
+                        .toLowerCase()}`)
+                }
+            }
+        }
+            
 
         await createCandidate(candidate)
         res.status(200).json({ ...candidate})
