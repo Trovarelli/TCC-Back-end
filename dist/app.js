@@ -16,6 +16,7 @@ const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const controller_1 = require("./controller");
 const middleware_1 = require("./middleware");
+const job_controller_1 = require("./controller/job.controller");
 require('dotenv').config();
 const cors = require('cors');
 const app = (0, express_1.default)();
@@ -23,6 +24,9 @@ app.use(express_1.default.json({ limit: '50mb' }));
 app.use(cors({
     origin: 'http://localhost:3000'
 }));
+app.get('/candidate/:id', middleware_1.checkToken, (req, res) => {
+    return (0, controller_1.getAllCadidateController)(req, res);
+});
 app.post('/candidate/:id', middleware_1.checkToken, (req, res) => {
     return (0, controller_1.createCandidateController)(req, res);
 });
@@ -35,18 +39,18 @@ app.get('/candidate/curriculum/:id/:candidatoId', middleware_1.checkToken, (req,
 app.post('/candidate/favorite/:id/:candidatoId', middleware_1.checkToken, (req, res) => {
     return (0, controller_1.favoriteCandidateController)(req, res);
 });
-app.get('/candidate/:id', middleware_1.checkToken, (req, res) => {
-    return (0, controller_1.getAllCadidateController)(req, res);
+app.get('/job/:id', middleware_1.checkToken, (req, res) => {
+    return (0, job_controller_1.getAllJobController)(req, res);
 });
-//ROTA PÚBLICA
-app.get('/', (req, res) => {
-    res.status(200).json({ message: "Bem vindo a nossa API!" });
+app.post('/job/:id', middleware_1.checkToken, (req, res) => {
+    return (0, job_controller_1.createJobController)(req, res);
 });
-//ROTA PRIVADA
+app.post('/job/:id/:jobId', middleware_1.checkToken, (req, res) => {
+    return (0, job_controller_1.deleteJobController)(req, res);
+});
 app.post('/user/:id', middleware_1.checkToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     return (0, controller_1.updateUserController)(req, res);
 }));
-//ROTA DE REGISTRO
 app.post('/auth/register', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     return (0, controller_1.createUserController)(req, res);
 }));

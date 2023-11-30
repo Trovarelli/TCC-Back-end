@@ -2,20 +2,22 @@ import mongoose from "mongoose";
 
 interface JobModel {
     userId: string,
-    company: string,
-    description: string,
-    skills: string[],
-    benefits: string[],
-    salary?: number
+    empresa: string,
+    descricao: string,
+    titulo: string,
+    caracteristicas: string[],
+    ativo?: boolean,
+    matchField: string[]
 }
 
 const JobSchema = new mongoose.Schema({
     userId: { type: String, required: true },
-    company: { type: String, required: true },
-    description: { type: String, required: true },
-    skills: { type: Array<String>, required: true },
-    benefits: { type: Array<String>, required: true },
-    salary: { type: Number, required: false },
+    empresa: { type: String, required: true },
+    descricao: { type: String, required: true },
+    titulo: { type: String, required: true },
+    caracteristicas: { type: Array<String>, required: true },
+    ativo: { type: Boolean, required: true, default: true  },
+    matchField: {type: Array<String>, required: false, readonly: true}
 });
 
 const Job = mongoose.model("Job", JobSchema);

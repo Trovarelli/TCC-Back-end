@@ -22,7 +22,8 @@ const CandidateSchema = new mongoose_1.default.Schema({
     genero: { type: String, required: false, readonly: true },
     pcd: { type: Boolean, required: false, readonly: true },
     lgbtq: { type: Boolean, required: false, readonly: true },
-    nivelProfissional: { type: String, required: false, readonly: true }
+    nivelProfissional: { type: String, required: false, readonly: true },
+    matchField: { type: (Array), required: false, readonly: true }
 });
 const Candidate = mongoose_1.default.model("Candidate", CandidateSchema);
 exports.Candidate = Candidate;

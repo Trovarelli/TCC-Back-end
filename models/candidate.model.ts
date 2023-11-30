@@ -18,6 +18,7 @@ interface CandidateModel {
     lgbtq?: boolean
     nivelProfissional?: 'estagiario' | 'junior' | 'pleno' | 'senior',
     email?: string
+    matchField: string[]
 }
 
 const CandidateSchema = new mongoose.Schema({
@@ -37,7 +38,8 @@ const CandidateSchema = new mongoose.Schema({
     genero: {type: String, required: false, readonly: true},
     pcd: {type: Boolean, required: false, readonly: true},
     lgbtq: {type: Boolean, required: false, readonly: true},
-    nivelProfissional: {type: String, required: false, readonly: true}
+    nivelProfissional: {type: String, required: false, readonly: true},
+    matchField: {type: Array<String>, required: false, readonly: true}
 });
 
 const Candidate = mongoose.model("Candidate", CandidateSchema);

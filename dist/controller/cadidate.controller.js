@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.favoriteCandidateController = exports.getCandidateCurriculumController = exports.createCandidateController = exports.deleteCadidateController = exports.getAllCadidateController = void 0;
 const repository_1 = require("../repository");
 const utils_1 = require("../utils");
+const makeMatchField_1 = require("../utils/makeMatchField");
 const getAllCadidateController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userIdByToken = (0, utils_1.getUserIdByToken)(req);
     const userIdFromParams = req.params.id;
@@ -60,7 +61,7 @@ const createCandidateController = (req, res) => __awaiter(void 0, void 0, void 0
         if (candidateExists)
             return res.status(409).json({ message: "Esse curriculo ja está cadastrado na sua base de dados" });
         const generalData = yield (0, utils_1.askGeralQuestions)(dataText);
-        const candidate = Object.assign(Object.assign({}, generalData), { userId: userIdFromParams, curriculo: curriculum, texto: dataText, favorito: false });
+        const candidate = (0, makeMatchField_1.createCandidatoMatchField)(Object.assign(Object.assign({}, generalData), { userId: userIdFromParams, curriculo: curriculum, texto: dataText, favorito: false }));
         const id = yield (0, repository_1.createCandidate)(candidate);
         const candidateToReturn = Object.assign(Object.assign({}, candidate), { _id: id });
         res.status(200).json(Object.assign({}, candidateToReturn));

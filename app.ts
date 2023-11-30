@@ -2,6 +2,7 @@ import express from 'express'
 import mongoose from 'mongoose'
 import { createUserController, loginController, createCandidateController, getAllCadidateController, updateUserController, deleteCadidateController, getCandidateCurriculumController, favoriteCandidateController } from './controller'
 import { checkToken } from './middleware'
+import { createJobController, deleteJobController, getAllJobController } from './controller/job.controller'
 
 require('dotenv').config()
 const cors = require('cors')
@@ -13,6 +14,10 @@ app.use(express.json({limit: '50mb'}))
 app.use(cors({
     origin: 'http://localhost:3000'
 }))
+
+app.get('/candidate/:id', checkToken, (req, res) => {
+    return getAllCadidateController(req, res)
+});
 
 app.post('/candidate/:id', checkToken, (req, res) => {
     return createCandidateController(req, res)
@@ -30,21 +35,22 @@ app.post('/candidate/favorite/:id/:candidatoId', checkToken, (req, res) => {
     return favoriteCandidateController(req, res)
 });
 
-app.get('/candidate/:id', checkToken, (req, res) => {
-    return getAllCadidateController(req, res)
+app.get('/job/:id', checkToken, (req, res) => {
+    return getAllJobController(req, res)
 });
 
-//ROTA PÚBLICA
-app.get('/', (req, res) => {
-    res.status(200).json({ message: "Bem vindo a nossa API!" })
-})
+app.post('/job/:id', checkToken, (req, res) => {
+    return createJobController(req, res)
+});
 
-//ROTA PRIVADA
+app.post('/job/:id/:jobId', checkToken, (req, res) => {
+    return deleteJobController(req, res)
+});
+
 app.post('/user/:id', checkToken, async (req, res) => {
     return updateUserController(req, res)
 })
 
-//ROTA DE REGISTRO
 app.post('/auth/register', async (req, res) => {
     return createUserController(req, res)
 })

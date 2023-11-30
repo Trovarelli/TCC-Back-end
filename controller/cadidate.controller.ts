@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { checkCandidateExistsByText, createCandidate, deleteCandidate, favoriteCandidate, findCandidatesById, findCandidatesByUser } from '../repository'
 import { CandidateModel } from "../models";
 import { askGeralQuestions, getUserIdByToken, savePdfForExtract } from "../utils";
+import { createCandidatoMatchField } from "../utils/makeMatchField";
 
 export const getAllCadidateController = async (req: Request, res: Response) => {
     const userIdByToken = getUserIdByToken(req)
@@ -63,13 +64,13 @@ export const createCandidateController = async (req: Request, res: Response) => 
 
         const generalData: CandidateModel = await askGeralQuestions(dataText)
        
-        const candidate: CandidateModel = {
+        const candidate: CandidateModel = createCandidatoMatchField({
             ...generalData,
             userId: userIdFromParams,
             curriculo: curriculum,
             texto: dataText,
             favorito: false,
-        }
+        })
         
         const id = await createCandidate(candidate)
 
