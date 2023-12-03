@@ -24,6 +24,9 @@ app.use(express_1.default.json({ limit: '50mb' }));
 app.use(cors({
     origin: 'http://localhost:3000'
 }));
+app.get('/', (req, res) => {
+    return res.send('Express Typescript on Vercel');
+});
 app.get('/candidate/:id', middleware_1.checkToken, (req, res) => {
     return (0, controller_1.getAllCadidateController)(req, res);
 });
@@ -66,4 +69,4 @@ mongoose_1.default.connect(`mongodb+srv://${dbUser}:${dbPassword}@cluster0.xn3pg
     app.listen(3001);
     console.log("Conexão realizada");
 }).catch((err) => console.log(err));
-//# sourceMappingURL=app.js.map
+//# sourceMappingURL=index.js.map

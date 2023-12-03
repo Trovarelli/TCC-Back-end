@@ -15,6 +15,10 @@ app.use(cors({
     origin: 'http://localhost:3000'
 }))
 
+app.get('/', (req, res) => {
+    return res.send('Express Typescript on Vercel')
+});
+
 app.get('/candidate/:id', checkToken, (req, res) => {
     return getAllCadidateController(req, res)
 });
@@ -54,6 +58,7 @@ app.post('/user/:id', checkToken, async (req, res) => {
 app.post('/auth/register', async (req, res) => {
     return createUserController(req, res)
 })
+
 
 //ROTA DE LOGIN
 app.post('/auth/login', async (req, res) => {
