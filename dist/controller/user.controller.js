@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUserById = exports.loginController = exports.createUserController = exports.updateUserController = void 0;
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const repository_1 = require("../repository");
 const utils_1 = require("../utils");
@@ -30,11 +30,11 @@ const updateUserController = (req, res) => __awaiter(void 0, void 0, void 0, fun
     const userIdByToken = (0, utils_1.getUserIdByToken)(req);
     if ((user === null || user === void 0 ? void 0 : user._id.toString()) !== userIdByToken || (user === null || user === void 0 ? void 0 : user._id.toString()) !== userIdFromParams)
         return res.status(401).json({ message: "Só é possivel atualizar informações do mesmo usuário logado" });
-    const checkPassword = yield bcrypt_1.default.compare(password, ((user === null || user === void 0 ? void 0 : user.password) || ''));
-    const salt = yield bcrypt_1.default.genSalt(12);
+    const checkPassword = yield bcryptjs_1.default.compare(password, ((user === null || user === void 0 ? void 0 : user.password) || ''));
+    const salt = yield bcryptjs_1.default.genSalt(12);
     let passwordHash = user === null || user === void 0 ? void 0 : user.password;
     if (!checkPassword && password !== '') {
-        passwordHash = yield bcrypt_1.default.hash(password, salt);
+        passwordHash = yield bcryptjs_1.default.hash(password, salt);
     }
     const newUser = { name, email, password: passwordHash || '', company, photo };
     try {
@@ -62,8 +62,8 @@ const createUserController = (req, res) => __awaiter(void 0, void 0, void 0, fun
     const userExists = yield (0, repository_1.findUserByEmail)(email);
     if (userExists)
         return res.status(400).json({ message: "Este e-mail ja está cadastrado" });
-    const salt = yield bcrypt_1.default.genSalt(12);
-    const passwordHash = yield bcrypt_1.default.hash(password, salt);
+    const salt = yield bcryptjs_1.default.genSalt(12);
+    const passwordHash = yield bcryptjs_1.default.hash(password, salt);
     const user = {
         name, email, password: passwordHash, company, photo: photo !== null && photo !== void 0 ? photo : ''
     };
@@ -86,7 +86,7 @@ const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function
     const user = yield (0, repository_1.findUserByEmail)(email);
     if (!user)
         return res.status(404).json({ message: "Usuário não cadastrado" });
-    const checkPassword = yield bcrypt_1.default.compare(password, user.password);
+    const checkPassword = yield bcryptjs_1.default.compare(password, user.password);
     if (!checkPassword)
         return res.status(400).json({ message: "Usuário ou senha inválidos" });
     try {
