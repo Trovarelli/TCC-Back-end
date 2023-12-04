@@ -1,15 +1,10 @@
 {
   "version": 2,
-  "builds": [
-      {
-          "src": "dist/index.js",
-          "use": "@vercel/node",
-          "config": { "includeFiles": ["dist/**"] }
-      }
-  ],
   "functions": {
-    "dist/controller/*": {
-      "maxDuration": 120
+    "dist/index.js": {
+      "maxDuration": 120,
+      "use": "@vercel/node",
+      "config": { "includeFiles": ["dist/**"] }
     }
   },
   "routes": [
