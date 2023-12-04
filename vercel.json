@@ -1,7 +1,7 @@
 {
   "version": 2,
   "functions": {
-    "api/**/*": {
+    "dist/**/*": {
       "maxDuration": 300
     }
   },
