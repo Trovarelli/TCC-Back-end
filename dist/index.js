@@ -21,12 +21,7 @@ require('dotenv').config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json({ limit: '50mb' }));
 const cors = require('cors');
-app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Connection'],
-    credentials: true,
-}));
+app.use(cors());
 app.options('*', cors());
 app.get('/', (req, res) => {
     return res.send('Seja bem vinda a tahr API');

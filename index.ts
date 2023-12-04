@@ -12,12 +12,7 @@ app.use(express.json({limit: '50mb'}))
 
 const cors = require('cors');
 
-app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Connection'],
-    credentials: true,
-  }));
+app.use(cors());
   
 app.options('*', cors());
 
