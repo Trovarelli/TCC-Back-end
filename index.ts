@@ -3,22 +3,26 @@ import mongoose from 'mongoose'
 import { createUserController, loginController, createCandidateController, getAllCadidateController, updateUserController, deleteCadidateController, getCandidateCurriculumController, favoriteCandidateController } from './controller'
 import { checkToken } from './middleware'
 import { createJobController, deleteJobController, getAllJobController } from './controller/job.controller'
+import cors from 'cors'
 
 require('dotenv').config()
-const cors = require('cors')
 
 const app = express()
 
 app.use(express.json({limit: '50mb'}))
 
 app.use(cors({
-    origin: '*',
-    credentials:true,
+    origin: true,
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
 }))
 
 app.options('*', cors({
-    origin: '*',
-    credentials:true,
+    origin: true,
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
 }))
 
 app.get('/', (req, res) => {

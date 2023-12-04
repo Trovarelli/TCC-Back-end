@@ -17,16 +17,20 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const controller_1 = require("./controller");
 const middleware_1 = require("./middleware");
 const job_controller_1 = require("./controller/job.controller");
+const cors_1 = __importDefault(require("cors"));
 require('dotenv').config();
-const cors = require('cors');
 const app = (0, express_1.default)();
 app.use(express_1.default.json({ limit: '50mb' }));
-app.use(cors({
-    origin: '*',
+app.use((0, cors_1.default)({
+    origin: true,
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
 }));
-app.options('*', cors({
-    origin: '*',
+app.options('*', (0, cors_1.default)({
+    origin: true,
+    methods: ['GET', 'POST', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
 }));
 app.get('/', (req, res) => {
