@@ -16,7 +16,7 @@ app.use(cors({
 }))
 
 app.get('/', (req, res) => {
-    return res.send('Express Typescript on Vercel')
+    return res.send('Seja bem vinda a tahr API')
 });
 
 app.get('/candidate/:id', checkToken, (req, res) => {
