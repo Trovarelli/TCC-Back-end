@@ -17,17 +17,17 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const controller_1 = require("./controller");
 const middleware_1 = require("./middleware");
 const job_controller_1 = require("./controller/job.controller");
-const cors_1 = __importDefault(require("cors"));
 require('dotenv').config();
 const app = (0, express_1.default)();
 app.use(express_1.default.json({ limit: '50mb' }));
-app.use((0, cors_1.default)({
-    origin: true,
+const cors = require('cors');
+app.use(cors({
+    origin: '*',
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Connection'],
     credentials: true,
 }));
-app.options('*', (0, cors_1.default)());
+app.options('*', cors());
 app.get('/', (req, res) => {
     return res.send('Seja bem vinda a tahr API');
 });

@@ -3,7 +3,6 @@ import mongoose from 'mongoose'
 import { createUserController, loginController, createCandidateController, getAllCadidateController, updateUserController, deleteCadidateController, getCandidateCurriculumController, favoriteCandidateController } from './controller'
 import { checkToken } from './middleware'
 import { createJobController, deleteJobController, getAllJobController } from './controller/job.controller'
-import cors from 'cors'
 
 require('dotenv').config()
 
@@ -11,14 +10,16 @@ const app = express()
 
 app.use(express.json({limit: '50mb'}))
 
+const cors = require('cors');
+
 app.use(cors({
-    origin: true,
+    origin: '*',
     methods: ['GET', 'POST', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Connection'],
     credentials: true,
-}))
-
-app.options('*', cors())
+  }));
+  
+app.options('*', cors());
 
 app.get('/', (req, res) => {
     return res.send('Seja bem vinda a tahr API')
