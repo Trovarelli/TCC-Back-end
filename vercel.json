@@ -1,7 +1,7 @@
 {
   "version": 2,
   "functions": {
-    "dist/controller/*": {
+    "api/controller/*": {
       "maxDuration": 300
     }
   },
