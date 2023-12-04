@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const checkToken = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(" ")[1];
+    const authHeader = req.headers['Authorization'];
+    const token = authHeader && String(authHeader).split(" ")[1];
     if (!token)
         return res.status(401).json({ message: 'Acesso negado' });
     try {

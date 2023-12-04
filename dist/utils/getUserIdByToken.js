@@ -6,8 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUserIdByToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const getUserIdByToken = (req) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(" ")[1] || '';
+    const authHeader = req.headers['Authorization'];
+    const token = authHeader && String(authHeader).split(" ")[1] || '';
     const secret = process.env.SECRET;
     const decoded = jsonwebtoken_1.default.verify(token, secret);
     return decoded === null || decoded === void 0 ? void 0 : decoded.key;
