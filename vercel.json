@@ -7,6 +7,11 @@
           "config": { "includeFiles": ["dist/**"] }
       }
   ],
+  "functions": {
+    "dist/controller/*": {
+      "maxDuration": 120
+    }
+  },
   "routes": [
       {
         "src": "/(.*)",
