@@ -25,7 +25,10 @@ app.use(cors({
     origin: '*',
     credentials: true,
 }));
-app.options('*', cors());
+app.options('*', cors({
+    origin: '*',
+    credentials: true,
+}));
 app.get('/', (req, res) => {
     return res.send('Seja bem vinda a tahr API');
 });
