@@ -1,10 +1,8 @@
 {
   "version": 2,
   "functions": {
-    "dist/index.js": {
-      "maxDuration": 120,
-      "use": "@vercel/node",
-      "config": { "includeFiles": ["dist/**"] }
+    "dist/**/*": {
+      "maxDuration": 120
     }
   },
   "routes": [
