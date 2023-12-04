@@ -14,16 +14,11 @@ app.use(express.json({limit: '50mb'}))
 app.use(cors({
     origin: true,
     methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Connection'],
     credentials: true,
 }))
 
-app.options('*', cors({
-    origin: true,
-    methods: ['GET', 'POST', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-}))
+app.options('*', cors())
 
 app.get('/', (req, res) => {
     return res.send('Seja bem vinda a tahr API')
