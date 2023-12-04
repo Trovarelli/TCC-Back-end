@@ -23,6 +23,7 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json({ limit: '50mb' }));
 app.use(cors({
     origin: '*',
+    credentials: true,
 }));
 app.get('/', (req, res) => {
     return res.send('Seja bem vinda a tahr API');
@@ -57,8 +58,11 @@ app.post('/user/:id', middleware_1.checkToken, (req, res) => __awaiter(void 0, v
 app.post('/auth/register', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     return (0, controller_1.createUserController)(req, res);
 }));
-//ROTA DE LOGIN
 app.post('/auth/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Allow-Headers", "content-type");
+    res.setHeader("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS");
     (0, controller_1.loginController)(req, res);
 }));
 const dbUser = process.env.DB_USER;

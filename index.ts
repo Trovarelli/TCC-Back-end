@@ -12,7 +12,8 @@ const app = express()
 app.use(express.json({limit: '50mb'}))
 
 app.use(cors({
-    origin: '*',  
+    origin: '*',
+    credentials:true,
 }))
 
 app.get('/', (req, res) => {
@@ -59,9 +60,11 @@ app.post('/auth/register', async (req, res) => {
     return createUserController(req, res)
 })
 
-
-//ROTA DE LOGIN
 app.post('/auth/login', async (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*")
+    res.setHeader("Access-Control-Allow-Credentials", "true")
+    res.setHeader("Access-Control-Allow-Headers", "content-type")
+    res.setHeader( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" )
     loginController(req, res)
 })
 
