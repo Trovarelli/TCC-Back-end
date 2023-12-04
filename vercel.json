@@ -8,7 +8,7 @@
       }
   ],
   "functions": {
-    "dist/index.js": {
+    "dist/**/*": {
       "maxDuration": 120
     }
   },
