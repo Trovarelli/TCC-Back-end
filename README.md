@@ -47,7 +47,7 @@ Certifique-se de autenticar suas solicitações, conforme necessário, para aces
 
 ## Autenticação
 
-Esta API utiliza autenticação baseada em tokens JWT (JSON Web Tokens). Para acessar rotas protegidas, inclua o token JWT no cabeçalho da solicitação: Authorization: Bearer SEU_TOKEN_JWT
+Esta API utiliza autenticação baseada em tokens JWT (JSON Web Tokens). Para acessar rotas protegidas, inclua o token JWT no cabeçalho da solicitação: authorization: Bearer SEU_TOKEN_JWT
 
 
 ## Contribuição
