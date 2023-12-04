@@ -67,10 +67,12 @@ app.post('/auth/login', async (req, res) => {
 const dbUser = process.env.DB_USER
 const dbPassword = process.env.DB_PASS
 const dbName = process.env.DB_NAME
+const port = process.env.PORT
 
 mongoose.set('strictQuery', false)
 
 mongoose.connect(`mongodb+srv://${dbUser}:${dbPassword}@cluster0.xn3pg3y.mongodb.net/${dbName}?retryWrites=true&w=majority`).then(() => {
-    app.listen(3001)
+    const server = app.listen(port)
+    server.timeout = 200000    
     console.log("Conexão realizada")
 }).catch((err) => console.log(err))

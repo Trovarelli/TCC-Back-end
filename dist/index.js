@@ -62,9 +62,11 @@ app.post('/auth/login', (req, res) => __awaiter(void 0, void 0, void 0, function
 const dbUser = process.env.DB_USER;
 const dbPassword = process.env.DB_PASS;
 const dbName = process.env.DB_NAME;
+const port = process.env.PORT;
 mongoose_1.default.set('strictQuery', false);
 mongoose_1.default.connect(`mongodb+srv://${dbUser}:${dbPassword}@cluster0.xn3pg3y.mongodb.net/${dbName}?retryWrites=true&w=majority`).then(() => {
-    app.listen(3001);
+    const server = app.listen(port);
+    server.timeout = 200000;
     console.log("Conexão realizada");
 }).catch((err) => console.log(err));
 //# sourceMappingURL=index.js.map
