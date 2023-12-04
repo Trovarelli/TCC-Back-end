@@ -25,6 +25,7 @@ app.use(cors({
     origin: '*',
     credentials: true,
 }));
+app.options('*', cors());
 app.get('/', (req, res) => {
     return res.send('Seja bem vinda a tahr API');
 });
@@ -59,10 +60,6 @@ app.post('/auth/register', (req, res) => __awaiter(void 0, void 0, void 0, funct
     return (0, controller_1.createUserController)(req, res);
 }));
 app.post('/auth/login', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Allow-Headers", "content-type");
-    res.setHeader("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS");
     (0, controller_1.loginController)(req, res);
 }));
 const dbUser = process.env.DB_USER;

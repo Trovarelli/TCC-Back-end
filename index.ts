@@ -16,6 +16,8 @@ app.use(cors({
     credentials:true,
 }))
 
+app.options('*', cors())
+
 app.get('/', (req, res) => {
     return res.send('Seja bem vinda a tahr API')
 });
@@ -61,10 +63,6 @@ app.post('/auth/register', async (req, res) => {
 })
 
 app.post('/auth/login', async (req, res) => {
-    res.setHeader("Access-Control-Allow-Origin", "*")
-    res.setHeader("Access-Control-Allow-Credentials", "true")
-    res.setHeader("Access-Control-Allow-Headers", "content-type")
-    res.setHeader( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" )
     loginController(req, res)
 })
 
