@@ -12,7 +12,7 @@ const app = express()
 app.use(express.json({limit: '50mb'}))
 
 app.use(cors({
-    origin: 'https://tahr.vercel.app'
+    origin: '*',  
 }))
 
 app.get('/', (req, res) => {

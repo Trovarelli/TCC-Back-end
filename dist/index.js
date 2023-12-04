@@ -22,7 +22,7 @@ const cors = require('cors');
 const app = (0, express_1.default)();
 app.use(express_1.default.json({ limit: '50mb' }));
 app.use(cors({
-    origin: 'https://tahr.vercel.app'
+    origin: '*',
 }));
 app.get('/', (req, res) => {
     return res.send('Seja bem vinda a tahr API');
