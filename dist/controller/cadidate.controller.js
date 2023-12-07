@@ -20,8 +20,6 @@ const getAllCadidateController = (req, res) => __awaiter(void 0, void 0, void 0,
         return res.status(401).json({ message: "Um usuário não pode visualzar candidatos de outro usuário." });
     try {
         const candidates = yield (0, repository_1.findCandidatesByUser)(userIdFromParams);
-        if (candidates.length === 0)
-            return res.status(404).json({ message: "Nenhum candidato encontrado." });
         res.status(200).json(candidates);
     }
     catch (err) {

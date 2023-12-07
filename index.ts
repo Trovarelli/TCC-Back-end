@@ -2,7 +2,7 @@ import express from 'express'
 import mongoose from 'mongoose'
 import { createUserController, loginController, createCandidateController, getAllCadidateController, updateUserController, deleteCadidateController, getCandidateCurriculumController, favoriteCandidateController } from './controller'
 import { checkToken } from './middleware'
-import { createJobController, deleteJobController, getAllJobController } from './controller/job.controller'
+import { createJobController, deleteJobController, getAllJobController, updateJobController } from './controller/job.controller'
 
 require('dotenv').config()
 
@@ -28,7 +28,7 @@ app.post('/candidate/:id', checkToken, (req, res) => {
     return createCandidateController(req, res)
 });
 
-app.post('/candidate/:id/:candidatoId', checkToken, (req, res) => {
+app.delete('/candidate/:id/:candidatoId', checkToken, (req, res) => {
     return deleteCadidateController(req, res)
 });
 
@@ -36,7 +36,7 @@ app.get('/candidate/curriculum/:id/:candidatoId', checkToken, (req, res) => {
     return getCandidateCurriculumController(req, res)
 });
 
-app.post('/candidate/favorite/:id/:candidatoId', checkToken, (req, res) => {
+app.patch('/candidate/favorite/:id/:candidatoId', checkToken, (req, res) => {
     return favoriteCandidateController(req, res)
 });
 
@@ -48,11 +48,15 @@ app.post('/job/:id', checkToken, (req, res) => {
     return createJobController(req, res)
 });
 
-app.post('/job/:id/:jobId', checkToken, (req, res) => {
+app.delete('/job/:id/:jobId', checkToken, (req, res) => {
     return deleteJobController(req, res)
 });
 
-app.post('/user/:id', checkToken, async (req, res) => {
+app.patch('/job/:id/:jobId', checkToken, (req, res) => {
+    return updateJobController(req, res)
+})
+
+app.put('/user/:id', checkToken, async (req, res) => {
     return updateUserController(req, res)
 })
 

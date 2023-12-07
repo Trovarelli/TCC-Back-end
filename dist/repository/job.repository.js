@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.controllStatusJob = exports.checkJobExistsByText = exports.findJobsById = exports.deleteJob = exports.findJobsByUser = exports.createJob = void 0;
+exports.updateJob = exports.checkJobExistsByText = exports.findJobsById = exports.deleteJob = exports.findJobsByUser = exports.createJob = void 0;
 const models_1 = require("../models");
 const createJob = (candidato) => __awaiter(void 0, void 0, void 0, function* () {
     return models_1.Job.create(candidato).then((data) => data._id);
@@ -31,8 +31,8 @@ const checkJobExistsByText = (userId, text) => __awaiter(void 0, void 0, void 0,
     return (yield models_1.Job.find({ userId, texto: text, }, '-userId')).length > 0;
 });
 exports.checkJobExistsByText = checkJobExistsByText;
-const controllStatusJob = (userId, JobId, controlledStatus) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield models_1.Job.updateOne({ _id: JobId, userId }, { favorito: controlledStatus });
+const updateJob = (userId, JobId, { descricao, titulo, caracteristicas }) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield models_1.Job.updateOne({ _id: JobId, userId }, { descricao, titulo, caracteristicas });
 });
-exports.controllStatusJob = controllStatusJob;
+exports.updateJob = updateJob;
 //# sourceMappingURL=job.repository.js.map

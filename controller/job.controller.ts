@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { controllStatusJob, createJob, deleteJob, findJobsByUser } from "../repository/job.repository"
+import { updateJob, createJob, deleteJob, findJobsByUser } from "../repository/job.repository"
 import { getUserIdByToken } from "../utils"
 import { JobModel } from "../models";
 import { createJobMatchField } from "../utils/makeMatchField";
@@ -13,9 +13,6 @@ export const getAllJobController = async (req: Request, res: Response) => {
 
     try {
         const jobs = await findJobsByUser(userIdFromParams)
-
-        if (jobs.length === 0) return res.status(404).json({ message: "Nenhuma vaga encontrada." })
-
         res.status(200).json(jobs)
     }
     catch (err) {
@@ -41,18 +38,20 @@ export const deleteJobController = async (req: Request, res: Response) => {
     }
 }
 
-export const controllStatusJobController = async (req: Request, res: Response) => {
+export const updateJobController = async (req: Request, res: Response) => {
     const userIdByToken = getUserIdByToken(req)
     const userIdFromParams = req.params.id
-    const candidateId = req.params.candidatoId
+    const jobId = req.params.jobId
+    const {descricao, titulo, caracteristicas} = req.body
+
+    if(!jobId) return res.status(400).json({message: "Por favor informe qual a vaga que deseja atualizar"})
 
     if(userIdFromParams !== userIdByToken) 
         return res.status(401).json({ message: "Um usuário não pode alterar os dados de vagas de outro usuário." })
 
         try {
-            const vagas = await controllStatusJob(userIdFromParams, candidateId, req.body?.favorito || true)
-    
-            if (!vagas) return res.status(404).json({ message: "Nenhuma vaga encontrada." })
+            await updateJob(userIdFromParams, jobId, {caracteristicas, descricao, titulo})
+
             res.status(200).json({ message: "Vaga atualizada com sucesso." })
         }
         catch (err) {

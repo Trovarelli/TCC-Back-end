@@ -13,8 +13,6 @@ export const getAllCadidateController = async (req: Request, res: Response) => {
 
     try {
         const candidates = await findCandidatesByUser(userIdFromParams)
-
-        if (candidates.length === 0) return res.status(404).json({ message: "Nenhum candidato encontrado." })
         res.status(200).json(candidates)
     }
     catch (err) {

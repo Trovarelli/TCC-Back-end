@@ -32,13 +32,13 @@ app.get('/candidate/:id', middleware_1.checkToken, (req, res) => {
 app.post('/candidate/:id', middleware_1.checkToken, (req, res) => {
     return (0, controller_1.createCandidateController)(req, res);
 });
-app.post('/candidate/:id/:candidatoId', middleware_1.checkToken, (req, res) => {
+app.delete('/candidate/:id/:candidatoId', middleware_1.checkToken, (req, res) => {
     return (0, controller_1.deleteCadidateController)(req, res);
 });
 app.get('/candidate/curriculum/:id/:candidatoId', middleware_1.checkToken, (req, res) => {
     return (0, controller_1.getCandidateCurriculumController)(req, res);
 });
-app.post('/candidate/favorite/:id/:candidatoId', middleware_1.checkToken, (req, res) => {
+app.patch('/candidate/favorite/:id/:candidatoId', middleware_1.checkToken, (req, res) => {
     return (0, controller_1.favoriteCandidateController)(req, res);
 });
 app.get('/job/:id', middleware_1.checkToken, (req, res) => {
@@ -47,10 +47,13 @@ app.get('/job/:id', middleware_1.checkToken, (req, res) => {
 app.post('/job/:id', middleware_1.checkToken, (req, res) => {
     return (0, job_controller_1.createJobController)(req, res);
 });
-app.post('/job/:id/:jobId', middleware_1.checkToken, (req, res) => {
+app.delete('/job/:id/:jobId', middleware_1.checkToken, (req, res) => {
     return (0, job_controller_1.deleteJobController)(req, res);
 });
-app.post('/user/:id', middleware_1.checkToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.patch('/job/:id/:jobId', middleware_1.checkToken, (req, res) => {
+    return (0, job_controller_1.updateJobController)(req, res);
+});
+app.put('/user/:id', middleware_1.checkToken, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     return (0, controller_1.updateUserController)(req, res);
 }));
 app.post('/auth/register', (req, res) => __awaiter(void 0, void 0, void 0, function* () {

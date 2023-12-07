@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createJobController = exports.controllStatusJobController = exports.deleteJobController = exports.getAllJobController = void 0;
+exports.createJobController = exports.updateJobController = exports.deleteJobController = exports.getAllJobController = void 0;
 const job_repository_1 = require("../repository/job.repository");
 const utils_1 = require("../utils");
 const makeMatchField_1 = require("../utils/makeMatchField");
@@ -20,8 +20,6 @@ const getAllJobController = (req, res) => __awaiter(void 0, void 0, void 0, func
         return res.status(401).json({ message: "Um usuário não pode visualzar vagas de outro usuário." });
     try {
         const jobs = yield (0, job_repository_1.findJobsByUser)(userIdFromParams);
-        if (jobs.length === 0)
-            return res.status(404).json({ message: "Nenhuma vaga encontrada." });
         res.status(200).json(jobs);
     }
     catch (err) {
@@ -45,24 +43,24 @@ const deleteJobController = (req, res) => __awaiter(void 0, void 0, void 0, func
     }
 });
 exports.deleteJobController = deleteJobController;
-const controllStatusJobController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
+const updateJobController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userIdByToken = (0, utils_1.getUserIdByToken)(req);
     const userIdFromParams = req.params.id;
-    const candidateId = req.params.candidatoId;
+    const jobId = req.params.jobId;
+    const { descricao, titulo, caracteristicas } = req.body;
+    if (!jobId)
+        return res.status(400).json({ message: "Por favor informe qual a vaga que deseja atualizar" });
     if (userIdFromParams !== userIdByToken)
         return res.status(401).json({ message: "Um usuário não pode alterar os dados de vagas de outro usuário." });
     try {
-        const vagas = yield (0, job_repository_1.controllStatusJob)(userIdFromParams, candidateId, ((_a = req.body) === null || _a === void 0 ? void 0 : _a.favorito) || true);
-        if (!vagas)
-            return res.status(404).json({ message: "Nenhuma vaga encontrada." });
+        yield (0, job_repository_1.updateJob)(userIdFromParams, jobId, { caracteristicas, descricao, titulo });
         res.status(200).json({ message: "Vaga atualizada com sucesso." });
     }
     catch (err) {
         res.status(401).json({ message: "Erro interno." });
     }
 });
-exports.controllStatusJobController = controllStatusJobController;
+exports.updateJobController = updateJobController;
 const createJobController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userIdByToken = (0, utils_1.getUserIdByToken)(req);
     const userIdFromParams = req.params.id;
