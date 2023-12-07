@@ -100,7 +100,7 @@ export const loginController = async (req: Request, res: Response) => {
 
         const {name, company, photo} = user
 
-        res.status(200).json({ message: `Olá ${user.name}, seja bem vindo(a)`, token, nome: name, empresa: company, foto: photo })
+        res.status(200).json({ message: `Olá ${user.name}, seja bem vindo(a)`, token, name, company, photo })
     } catch (err) {
         console.log(err)
         res.status(500).json({ message: `Erro no servidor: ${err}` })
