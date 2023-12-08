@@ -35,20 +35,12 @@ exports.createCandidatoMatchField = createCandidatoMatchField;
 const createJobMatchField = (job) => {
     const matchField = [];
     for (const key in job) {
-        if (job.hasOwnProperty(key) && key !== 'userId' && key !== '_id' && key !== 'empresa' && key !== 'matchField') {
+        if (job.hasOwnProperty(key) && key === 'caracteristicas') {
             let element = job[key];
-            if (element && Array.isArray(element)) {
-                element.forEach((e) => {
-                    const splitedElement = String(e).split(' ');
-                    splitedElement.forEach((s) => matchField.push(`${key}:${s.toLowerCase()}`));
-                });
-            }
-            if (element) {
-                if (typeof element === 'boolean')
-                    element = element ? 'sim' : 'nao';
-                const splitedElement = String(element).split(' ');
+            element.forEach((e) => {
+                const splitedElement = String(e).split(' ');
                 splitedElement.forEach((s) => matchField.push(`${key}:${s.toLowerCase()}`));
-            }
+            });
         }
     }
     const newJob = Object.assign(Object.assign({}, job), { matchField });

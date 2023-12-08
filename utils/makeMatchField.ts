@@ -37,19 +37,13 @@ export const createCandidatoMatchField = (candidato: CandidateModel) => {
 export const createJobMatchField = (job: JobModel) => {
     const matchField:string[] = []
     for (const key in job) {
-        if (job.hasOwnProperty(key) && key !== 'userId' && key !== '_id' && key !== 'empresa' && key !== 'matchField') {
-            let element = job[key as keyof typeof job] as string | string[] | boolean
-            if (element && Array.isArray(element)) {
-                element.forEach((e) => {
-                    const splitedElement = String(e).split(' ')
-                    splitedElement.forEach((s) => matchField.push(`${key}:${s.toLowerCase()}`))
-                })
-            }
-            if(element) {
-                if(typeof element === 'boolean') element = element ? 'sim' : 'nao'
-                const splitedElement = String(element).split(' ')
+        if (job.hasOwnProperty(key) && key ==='caracteristicas') {
+            let element = job[key as keyof typeof job] as string[]
+           
+            element.forEach((e) => {
+                const splitedElement = String(e).split(' ')
                 splitedElement.forEach((s) => matchField.push(`${key}:${s.toLowerCase()}`))
-            }
+            })
         }
     }
 
