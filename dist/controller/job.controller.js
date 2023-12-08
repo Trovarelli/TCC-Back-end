@@ -57,7 +57,7 @@ const updateJobController = (req, res) => __awaiter(void 0, void 0, void 0, func
         if (newJob) {
             const jobWithMatchField = (0, makeMatchField_1.createJobMatchField)({ empresa: newJob === null || newJob === void 0 ? void 0 : newJob.empresa, descricao, caracteristicas, userId: userIdByToken, ativo: false, titulo, matchField: [] });
             yield (0, job_repository_1.updateJob)(userIdFromParams, jobId, { caracteristicas, descricao, titulo, matchField: jobWithMatchField.matchField });
-            return res.status(200).json({ message: "Vaga atualizada com sucesso.", job: jobWithMatchField });
+            return res.status(200).json({ message: "Vaga atualizada com sucesso.", job: Object.assign(Object.assign({}, jobWithMatchField), { _id: jobId }) });
         }
         return res.status(404).json({ message: "Vaga não encontrada" });
     }

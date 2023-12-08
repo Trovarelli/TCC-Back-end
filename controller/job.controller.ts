@@ -54,7 +54,7 @@ export const updateJobController = async (req: Request, res: Response) => {
             if(newJob) {
                 const jobWithMatchField: JobModel = createJobMatchField({ empresa: newJob?.empresa, descricao, caracteristicas, userId: userIdByToken, ativo: false, titulo, matchField: []})
                 await updateJob(userIdFromParams, jobId, {caracteristicas, descricao, titulo, matchField: jobWithMatchField.matchField})
-                return res.status(200).json({ message: "Vaga atualizada com sucesso.", job: jobWithMatchField })
+                return res.status(200).json({ message: "Vaga atualizada com sucesso.", job: {...jobWithMatchField, _id: jobId} })
             }
             
             return res.status(404).json({ message: "Vaga não encontrada" })       
