@@ -50,16 +50,14 @@ export const updateJobController = async (req: Request, res: Response) => {
         return res.status(401).json({ message: "Um usuário não pode alterar os dados de vagas de outro usuário." })
 
         try {
-          await updateJob(userIdFromParams, jobId, {caracteristicas, descricao, titulo})
-
-          const newJob = await findJobsById(userIdByToken, jobId)
-
-        if(newJob) {
-            const jobWithMatchField: JobModel = createJobMatchField({ empresa: newJob?.empresa, descricao, caracteristicas, userId: userIdByToken, ativo: false, titulo, matchField: []})
-
-            return res.status(200).json({ message: "Vaga atualizada com sucesso.", job: jobWithMatchField })
-        }
-        else return res.status(500).json({ message: "Erro ao atualizar vaga" })
+            const newJob = await findJobsById(userIdByToken, jobId)
+            if(newJob) {
+                const jobWithMatchField: JobModel = createJobMatchField({ empresa: newJob?.empresa, descricao, caracteristicas, userId: userIdByToken, ativo: false, titulo, matchField: []})
+                await updateJob(userIdFromParams, jobId, {caracteristicas, descricao, titulo, matchField: jobWithMatchField.matchField})
+                return res.status(200).json({ message: "Vaga atualizada com sucesso.", job: jobWithMatchField })
+            }
+            
+            return res.status(404).json({ message: "Vaga não encontrada" })       
         }
         catch (err) {
             res.status(401).json({ message: "Erro interno." })

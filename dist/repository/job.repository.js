@@ -31,8 +31,8 @@ const checkJobExistsByText = (userId, text) => __awaiter(void 0, void 0, void 0,
     return (yield models_1.Job.find({ userId, texto: text, }, '-userId')).length > 0;
 });
 exports.checkJobExistsByText = checkJobExistsByText;
-const updateJob = (userId, JobId, { descricao, titulo, caracteristicas }) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield models_1.Job.updateOne({ _id: JobId, userId }, { descricao, titulo, caracteristicas });
+const updateJob = (userId, JobId, { descricao, titulo, caracteristicas, matchField }) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield models_1.Job.updateOne({ _id: JobId, userId }, { descricao, titulo, caracteristicas, matchField });
 });
 exports.updateJob = updateJob;
 //# sourceMappingURL=job.repository.js.map

@@ -53,14 +53,13 @@ const updateJobController = (req, res) => __awaiter(void 0, void 0, void 0, func
     if (userIdFromParams !== userIdByToken)
         return res.status(401).json({ message: "Um usuário não pode alterar os dados de vagas de outro usuário." });
     try {
-        yield (0, job_repository_1.updateJob)(userIdFromParams, jobId, { caracteristicas, descricao, titulo });
         const newJob = yield (0, job_repository_1.findJobsById)(userIdByToken, jobId);
         if (newJob) {
             const jobWithMatchField = (0, makeMatchField_1.createJobMatchField)({ empresa: newJob === null || newJob === void 0 ? void 0 : newJob.empresa, descricao, caracteristicas, userId: userIdByToken, ativo: false, titulo, matchField: [] });
+            yield (0, job_repository_1.updateJob)(userIdFromParams, jobId, { caracteristicas, descricao, titulo, matchField: jobWithMatchField.matchField });
             return res.status(200).json({ message: "Vaga atualizada com sucesso.", job: jobWithMatchField });
         }
-        else
-            return res.status(500).json({ message: "Erro ao atualizar vaga" });
+        return res.status(404).json({ message: "Vaga não encontrada" });
     }
     catch (err) {
         res.status(401).json({ message: "Erro interno." });

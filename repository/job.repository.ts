@@ -20,6 +20,6 @@ export const checkJobExistsByText = async (userId: string, text: string) => {
     return (await Job.find({userId, texto: text,}, '-userId')).length > 0
 }
 
-export const updateJob = async (userId: string, JobId: string, {descricao, titulo, caracteristicas}: {descricao: string, titulo: string, caracteristicas: string[]}) => {
-    return await Job.updateOne({_id: JobId, userId}, {descricao, titulo, caracteristicas })
+export const updateJob = async (userId: string, JobId: string, {descricao, titulo, caracteristicas, matchField}: {descricao: string, titulo: string, caracteristicas: string[], matchField: string[]}) => {
+    return await Job.updateOne({_id: JobId, userId}, {descricao, titulo, caracteristicas, matchField })
 }
