@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { updateJob, createJob, deleteJob, findJobsByUser } from "../repository/job.repository"
+import { updateJob, createJob, deleteJob, findJobsByUser, findJobsById } from "../repository/job.repository"
 import { getUserIdByToken } from "../utils"
 import { JobModel } from "../models";
 import { createJobMatchField } from "../utils/makeMatchField";
@@ -50,9 +50,16 @@ export const updateJobController = async (req: Request, res: Response) => {
         return res.status(401).json({ message: "Um usuário não pode alterar os dados de vagas de outro usuário." })
 
         try {
-            await updateJob(userIdFromParams, jobId, {caracteristicas, descricao, titulo})
+          await updateJob(userIdFromParams, jobId, {caracteristicas, descricao, titulo})
 
-            res.status(200).json({ message: "Vaga atualizada com sucesso." })
+          const newJob = await findJobsById(userIdByToken, jobId)
+
+        if(newJob) {
+            const jobWithMatchField: JobModel = createJobMatchField({ empresa: newJob?.empresa, descricao, caracteristicas, userId: userIdByToken, ativo: false, titulo, matchField: []})
+
+            return res.status(200).json({ message: "Vaga atualizada com sucesso.", job: jobWithMatchField })
+        }
+        else return res.status(500).json({ message: "Erro ao atualizar vaga" })
         }
         catch (err) {
             res.status(401).json({ message: "Erro interno." })
