@@ -37,7 +37,7 @@ export const createCandidatoMatchField = (candidato: CandidateModel) => {
 export const createJobMatchField = (job: JobModel) => {
     const matchField:string[] = []
     for (const key in job) {
-        if (job.hasOwnProperty(key) && key !== 'userId' && key !== '_id') {
+        if (job.hasOwnProperty(key) && key !== 'userId' && key !== '_id' && key !== 'empresa' && key !== 'matchField') {
             let element = job[key as keyof typeof job] as string | string[] | boolean
             if (element && Array.isArray(element)) {
                 element.forEach((e) => {

@@ -35,7 +35,7 @@ exports.createCandidatoMatchField = createCandidatoMatchField;
 const createJobMatchField = (job) => {
     const matchField = [];
     for (const key in job) {
-        if (job.hasOwnProperty(key) && key !== 'userId' && key !== '_id') {
+        if (job.hasOwnProperty(key) && key !== 'userId' && key !== '_id' && key !== 'empresa' && key !== 'matchField') {
             let element = job[key];
             if (element && Array.isArray(element)) {
                 element.forEach((e) => {
