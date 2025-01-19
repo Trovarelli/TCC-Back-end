@@ -1,31 +1,38 @@
 import OpenAI from 'openai'
 
-export async function askGeralQuestions(curriculo: string) {
+export async function askGeralQuestions(curriculo: string, key: string) {
   
   const openai = new OpenAI({
-    apiKey: process.env.GPT_API_KEY
+    apiKey: key
   });
+
+    const prompt = `
+    Analyze the following resume and extract the requested information. Structure the response as a JSON object. If a field is not found, use the default values or leave it empty as indicated.
+
+    Resume:
+    ${curriculo}
+
+    Respond with JSON only (strict format):
+    {
+      "name": string (The person's name, or empty if not provided),
+      "age": number (Age in years. If provided as a date of birth, calculate the age up to the current year. Use 0 if not provided),
+      "email": string (The person's email, or empty if not found),
+      "experience": string[] (An array of professional experiences, or empty if none found),
+      "phone": string[] (An array of phone numbers, or empty if none found),
+      "gender": string ("M" for male, "F" for female, or empty if not specified),
+      "profession": string (The person's profession, or empty if not provided),
+      "traits": string[] (An array of personal traits or soft skills, such as resilient, competitive, etc., or empty if none found),
+      "pcd": boolean (True if the person is identified as having a disability, false otherwise),
+      "education": string[] (An array of educational qualifications, or empty if none found),
+      "skills": string[] (An array of technical skills, or empty if none found),
+      "lgbtq": boolean (True if the person identifies as LGBTQIA+, false otherwise),
+      "professionalLevel": "intern" | "junior" | "mid" | "senior" (Determine based on the total years of experience in technology: 0-1 year = "intern", 1-2 years = "junior", 2-5 years = "mid", 5+ years = "senior")
+    }
+  `;
 
   
   const chatCompletion: OpenAI.Chat.ChatCompletion = await openai.chat.completions.create({
-    messages: [{ role: 'user', content: `
-    ${curriculo}
-    Desconsidere respostas anteriores. Esse é um curriculo de uma pessoa, quero que voce extraia as seguintes informações, profissao, escolaridade, nome, idade, email, experiencia, telefone, genero, pcd, competencias, lgbtq, nivelProfissional e a resposta deve ser estruturada desta forma no formato json. Não é obrigatorio preencher todos os campos {
-      nome: string (este campo deve conter o nome da pessoa)
-      idade: number (este campo deve ser um numero, caso a idade seja fornecida como data calcular o ano de nascimento - até o ano atual, se não for informado, deve ser 0)
-      email: string (este campo deve conter o email da pessoa)
-      experiencia: string[] (este campo pode conter uma ou mais experiencias profissionais, esta informação deve ser um array de string)
-      telefone: string[] (este campo deve informar um ou mais telefones de contato)
-      genero: string (neste campo deve ser 'M' para masculino ou 'F' para feminino)
-      profissao: string (este campo deve conter a profissao da pessoa, se não for informado deve ser vazio '')
-      caracteristicas: string[] (este campo deve conter uma ou mais caracteristicas pessoais, sendo elas softskills e traços de personalidade, por exemplo: resiliente, competitivo, etc. Esta informação deve ser um array de string)
-      pcd: boolean (colocar true caso encontrado que seja portador de deficiencias, caso não false)
-      escolaridade: string[] (este campo pode conter uma ou mais formações educacionais do candidato de qualquer nível, esta informação deve ser um array de string)
-      competencias: string[] (este campo deve informar todas as competencias encontradas dentro de um array de string)
-      lgbtq: (esse campo deve ser true caso a pessoa se idetifique com outro genero alem do masculino e feminino, se nao for informado, deve ser false)
-      nivelProfissional: 'estagiario' | 'junior' | 'pleno' | 'senior' (esse campo deve levar em consideração os anos de experiencia profissional na area de tecnologia, somando o tempo em que se passou em cada uma das empresas, sendo que: estagiario = 0 a 1 ano, junior = 1 a 2 anos, pleno = 2 a 5 anos, senior = 5 anos ou mais)
-    }
-    `  }],
+    messages: [{ role: 'user', content: prompt.trim() }],
     model: 'gpt-3.5-turbo',
   });
 
@@ -33,20 +40,15 @@ export async function askGeralQuestions(curriculo: string) {
 }
 
 const formatResponse = (response: string) => {
-  if(response.includes('{') && response.includes('}')) {
-    let formattedResponse = response
-  if(response?.split('')[0] !== '{') {
-    if(response?.split('}')[1] !== '') {
-      formattedResponse = '{' + response?.split('{')[1]?.split('}')[0] + '}'
+  try {
+    return JSON.parse(response);
+  } catch {
+    const jsonStart = response.indexOf("{");
+    const jsonEnd = response.lastIndexOf("}");
+    if (jsonStart !== -1 && jsonEnd !== -1) {
+      const formattedResponse = response.slice(jsonStart, jsonEnd + 1);
+      return JSON.parse(formattedResponse);
     }
-    else formattedResponse = '{' + response?.split('{')[1]
-  }
-  else if(response?.split('}')[1] !== '') {
-    formattedResponse = response?.split('}')[0] + '}'
-  }
-  return JSON.parse(formattedResponse)
-  } else {
     throw new Error('Não foi possível extrair as informações do curriculo, por favor, tente novamente.')
   }
-  
-}
+};

@@ -41,6 +41,7 @@ export const deleteCadidateController = async (req: Request, res: Response) => {
 export const createCandidateController = async (req: Request, res: Response) => {
     const userIdByToken = getUserIdByToken(req)
     const userIdFromParams = req.params.id
+    const apiKey = req.headers['apiKey']
 
     if(userIdFromParams !== userIdByToken) 
         return res.status(401).json({ message: "Um usuário não pode criar candidatos em nome de outro usuário." })
@@ -60,7 +61,7 @@ export const createCandidateController = async (req: Request, res: Response) => 
 
         if(candidateExists) return res.status(409).json({ message: "Esse curriculo ja está cadastrado na sua base de dados" })
 
-        const generalData: CandidateModel = await askGeralQuestions(dataText)
+        const generalData: CandidateModel = await askGeralQuestions(dataText, String(apiKey))
        
         const candidate: CandidateModel = createCandidatoMatchField({
             ...generalData,
